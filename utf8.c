@@ -17,7 +17,13 @@
 #include <sys/types.h>
 
 #include <wchar.h>
+#ifdef _WIN32
+#include <winsock.h>
+#else
 #include <arpa/inet.h>	/* for htonl() */
+#endif
+
+#include<stdio.h>
 
 #include "utf8.h"
 
@@ -219,7 +225,8 @@ size_t
 wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
     int flags)
 {
-	wchar_t *w, *wlim, ch;
+	wchar_t *w, *wlim;
+	u_long ch;
 	u_char *p, *lim, *oc;
 	size_t total, n;
 

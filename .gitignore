@@ -8,3 +8,4 @@ tests.log
 *.tar.gz
 build
 .cache
+*.code-workspace

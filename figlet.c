@@ -75,8 +75,19 @@
 
 #define DIRSEP '/'
 #define DIRSEP2 '\\'
+#define DIRSEPSTR "/"
+#define DIRSEPSTR2 "\\"
 /* Leave alone for Unix and MS-DOS/Windows!
 Note: '/' also used in filename in get_columns(). */
+
+#if defined(__linux__)
+#include <limits.h>
+#define MAXPATHLEN PATH_MAX
+#elif defined(_WIN32)
+#define MAXPATHLEN MAX_PATH
+#else
+#define MAXPATHLEN 4096
+#endif
 
 #ifndef DEFAULTFONTDIR
 #define DEFAULTFONTDIR "fonts"
@@ -936,11 +947,57 @@ void getparams()
   else {
     myname = Myargv[0];
     }
-  fontdirname = DEFAULTFONTDIR;
+  fontdirname = (char*)myalloc(MAXPATHLEN);
+  strcpy(fontdirname,DEFAULTFONTDIR);
   env = getenv("FIGLET_FONTDIR");
   if (env!=NULL) {
-    fontdirname = env;
+    strcpy(fontdirname,env);
     }
+#if defined(_WIN32)
+  if (fontdirname[1]!=':' || (fontdirname[2]!=DIRSEP2 || fontdirname[2]!=DIRSEP)){
+    char buf[MAXPATHLEN];
+    if (!GetModuleFileName(NULL,buf,MAXPATHLEN))
+    {
+      fprintf(stderr,"Fatal: failed to get FIGlet exe path\n");
+      exit(1);
+      }
+    char* lastdirseppos;
+    if ((lastdirseppos=strrchr(buf,DIRSEP2))!=NULL) {
+      *lastdirseppos = '\0';
+      strcat(buf,DIRSEPSTR2);
+      strcat(buf,fontdirname);
+      strcpy(fontdirname,buf);
+      }
+    }
+#elif defined(__linux__)
+  if (fontdirname[0]!='/') {
+    char buf[MAXPATHLEN];
+    if(readlink("/proc/self/exe",buf,sizeof(buf))==-1) {
+      fprintf(stderr,"Fatal: failed to get FIGlet exe path\n");
+      exit(1);
+      }
+    char* lastdirseppos;
+    if ((lastdirseppos=strrchr(buf,DIRSEP))!=NULL) {
+      *lastdirseppos = '\0';
+      strcat(buf,DIRSEPSTR);
+      strcat(buf,fontdirname);
+      strcpy(fontdirname,buf);
+      }
+    }
+#elif defined(__APPLE__)
+  if (fontdirname[0]!='/') {
+    char buf[MAXPATHLEN];
+    unsigned int bufsize = sizeof(buf);
+    _NSGetExecutablePath(buf,&bufsize);
+    char* lastdirseppos;
+    if ((lastdirseppos=strrchr(buf,DIRSEP))!=NULL) {
+      *lastdirseppos = '\0';
+      strcat(buf,DIRSEPSTR);
+      strcat(buf,fontdirname);
+      strcpy(fontdirname,buf);
+      }
+    }
+#endif
   fontname = DEFAULTFONTFILE;
   cfilelist = NULL;
   cfilelistend = &cfilelist;
@@ -1050,6 +1107,7 @@ void getparams()
           }
         break;
       case 'd':
+        free(fontdirname);
         fontdirname = optarg;
         break;
       case 'f':

@@ -11,10 +11,6 @@
     (as listed in the file "LICENSE" which is included in this package)
 ****************************************************************************/
 
-#define DATE "31 May 2012"
-#define VERSION "2.2.5"
-#define VERSION_INT 20205
-
 /* FIGlet (Frank, Ian & Glenn's Letters) */
 /* by Glenn Chappell */
 /* Apr 1991 */
@@ -50,12 +46,6 @@
     used). This file should reside in the directory specified by
     DEFAULTFONTDIR.
 ---------------------------------------------------------------------------*/
-#ifndef DEFAULTFONTDIR
-#define DEFAULTFONTDIR "fonts"
-#endif
-#ifndef DEFAULTFONTFILE
-#define DEFAULTFONTFILE "standard.flf"
-#endif
 
 #include <stdio.h>
 #ifdef __STDC__
@@ -69,6 +59,8 @@
 #if defined(unix) || defined(__unix__) || defined(__APPLE__)
 #include <unistd.h>
 #include <sys/ioctl.h> /* Needed for get_columns */
+#elif defined(_WIN32)
+#include <windows.h>   /* Needed for get_columns (Windows) */
 #endif
 
 #ifdef TLF_FONTS
@@ -85,6 +77,18 @@
 #define DIRSEP2 '\\'
 /* Leave alone for Unix and MS-DOS/Windows!
 Note: '/' also used in filename in get_columns(). */
+
+#ifndef DEFAULTFONTDIR
+#define DEFAULTFONTDIR "fonts"
+#endif
+#ifndef DEFAULTFONTFILE
+#define DEFAULTFONTFILE "standard.flf"
+#endif
+
+#define DATE "31 May 2012"
+/* move DATE macro definition to here because DATE has been defined as an alias of double under windows */
+#define VERSION "2.2.5"
+#define VERSION_INT 20205
 
 #define FONTFILESUFFIX ".flf"
 #define FONTFILEMAGICNUMBER "flf2"
@@ -264,6 +268,15 @@ int get_columns()
   result = ioctl(fd,TIOCGWINSZ,&ws);
   close(fd);
   return result?-1:ws.ws_col;
+}
+#elif defined(_WIN32)
+int get_columns()
+{
+  HANDLE hConsole = NULL;
+  if ((hConsole = GetStdHandle(STD_OUTPUT_HANDLE))==INVALID_HANDLE_VALUE) return -1;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  if (GetConsoleScreenBufferInfo(hConsole,&csbi)==0) return -1;
+  return csbi.dwSize.X;
 }
 #endif /* ifdef TIOCGWINSZ */
 
@@ -1002,7 +1015,7 @@ void getparams()
 	smushoverride = SMO_YES;
         break;
       case 't':
-#ifdef TIOCGWINSZ
+#if defined(TIOCGWINSZ) || defined(_WIN32)
         columns = get_columns();
         if (columns>0) {
           outputwidth = columns;

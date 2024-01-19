@@ -9,3 +9,7 @@ tests.log
 build
 .cache
 *.code-workspace
+*.log
+__pycache__/
+*.py[cod]
+*$py.class

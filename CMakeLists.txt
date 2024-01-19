@@ -48,6 +48,9 @@ add_executable(chkfont
     chkfont.c
 )
 
+enable_testing()
+add_subdirectory(tests)
+
 install(
     TARGETS figlet chkfont
     RUNTIME DESTINATION .
@@ -55,4 +58,8 @@ install(
 install(
     FILES ${FIGLET_FONT_CONTROL_FILES} ${FIGLET_FONT_FILES}
     DESTINATION ${FIGlet_Default_Font_Dir}
+)
+install(
+    FILES ${CMAKE_SOURCE_DIR}/figlist.bat ${CMAKE_SOURCE_DIR}/showfigfonts.bat
+    DESTINATION .
 )

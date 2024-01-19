@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #endif
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #define DATE "20 Feb 1996"
 #define VERSION "2.2"
 
@@ -461,6 +465,10 @@ int main(argc,argv)
 int argc;
 char *argv[];
 {
+#ifdef _WIN32
+SetConsoleCP(CP_UTF8);
+SetConsoleOutputCP(CP_UTF8);
+#endif
 int arg;
 
 if ((myname=strrchr(argv[0],'/'))!=NULL) {

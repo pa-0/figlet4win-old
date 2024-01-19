@@ -2075,6 +2075,12 @@ int main(argc,argv)
 int argc;
 char *argv[];
 {
+#ifdef _WIN32
+  SetConsoleCP(CP_UTF8);
+  SetConsoleOutputCP(CP_UTF8);
+  // windows wide char output
+#endif
+
   inchr c,c2;
   int i;
   int last_was_eol_flag;

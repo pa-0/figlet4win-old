@@ -1,0 +1,7 @@
+<CPackWiXPatch>
+    <CPackWiXFragment Id="CM_CP_figlet.exe">
+        <Environment Id="FIGLET4WIN_BIN_DIR" Action="set" Part="first"
+			Name="PATH" Value="[INSTALL_ROOT]"
+			System="yes"/>
+    </CPackWiXFragment>
+</CPackWiXPatch>

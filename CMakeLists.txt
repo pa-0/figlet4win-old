@@ -47,12 +47,15 @@ endif()
 add_executable(chkfont
     chkfont.c
 )
+add_executable(figinstall
+    figinstall.c
+)
 
 enable_testing()
 add_subdirectory(tests)
 
 install(
-    TARGETS figlet chkfont
+    TARGETS figlet chkfont figinstall
     RUNTIME DESTINATION .
 )
 install(

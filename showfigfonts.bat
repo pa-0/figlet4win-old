@@ -46,10 +46,10 @@ if "%1"=="-d" (
     )
     set word="%3"
 ) else (
-    for /f "delims=" %%i in ('%figlet_path% -I2') do set fontdir=%%i
-    if not "!fontdir:~1,1!"==":" (
-        if not "!fontdir:~2,1!"=="\" (
-            set fontdir=%~dp0!fontdir!
+    for /f "delims=" %%i in ('%figlet_path% -I2') do set fontdir="%%i"
+    if not "!fontdir:~2,1!"==":" (
+        if not "!fontdir:~3,1!"=="\" (
+            set fontdir="%~dp0!fontdir!"
         )
     )
     if %argc% lss 1 (
@@ -67,9 +67,9 @@ if "%1"=="-d" (
 for /r %fontdir% %%i in (*.flf) do (
     echo %%~ni :
     if not defined word (
-        call %figlet_path% -d "%fontdir%" -f "%%~ni" "%%~ni"
+        call %figlet_path% -d %fontdir% -f "%%~ni" "%%~ni"
     ) else (
-        call %figlet_path% -d "%fontdir%" -f "%%~ni" "%word%"
+        call %figlet_path% -d %fontdir% -f "%%~ni" "%word%"
     )
     echo.
 )

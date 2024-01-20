@@ -44,15 +44,15 @@ if "%1"=="-d" (
 )
 
 if "%fontdir%"=="" (
-    for /f "delims=" %%i in ('%figlet_path% -I2') do set fontdir=%%i
+    for /f "delims=" %%i in ('%figlet_path% -I2') do set fontdir="%%i"
 )
 for /f "delims=" %%i in ('%figlet_path% -I3') do set font=%%i
 echo Default font: %font%
 echo Font directory: %fontdir%
 
-if not "!fontdir:~1,1!"==":" (
-    if not "!fontdir:~2,1!"=="\" (
-        set fontdir=%~dp0!fontdir!
+if not "!fontdir:~2,1!"==":" (
+    if not "!fontdir:~3,1!"=="\" (
+        set fontdir="%~dp0!fontdir!"
     )
 )
 

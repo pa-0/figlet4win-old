@@ -13,3 +13,4 @@ build
 __pycache__/
 *.py[cod]
 *$py.class
+chm_output/

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Notes - Avoiding Errors and General Advice</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+</style>
+
+</head>
+
+<body>
+<H1>Notes - Avoiding Errors and General Advice</H1>
+<P>It is very important that every character in a font has 
+the same height, and, once the endmarks are removed, that all the lines 
+constituting a single <STRONG>FIGcharacter</STRONG> have the same 
+length.&nbsp;Be careful also that no lines in the font file have trailing blanks 
+(spaces), as the <STRONG>FIGdriver</STRONG> will take these to be the endmarks. 
+(<STRONG>FIGWin 1.0</STRONG> will not consider blanks to be endmarks.)</P>
+<P>Errors in a <STRONG>FIGfont</STRONG> can be detected by using 
+the&nbsp;<STRONG>chkfont</STRONG> program, part of the standard 
+<STRONG>FIGlet</STRONG> package, and also available, as of this writing from <A 
+href="http://www.figlet.org/">http://www.figlet.org/</A>.</P>
+<P>For <STRONG>FIGWin</STRONG> users, the <STRONG>FIGWin</STRONG> program will 
+report errors when a <STRONG>FIGfont </STRONG>is read in; it is less forgiving 
+than <STRONG>FIGlet</STRONG>, which can produce nonsense if the 
+<STRONG>FIGfont</STRONG> is incorrectly formatted.</P>
+<P>Remember that <STRONG>sub-characters</STRONG> outside of the ASCII range will 
+not necessarily display the same way on your system as on others.</P>
+<P>The blank (space) <STRONG>FIGcharacter</STRONG> should usually consist of one 
+or two columns of hardblanks and nothing else; slanted fonts are an exception to 
+this rule. If the space <STRONG>FIGcharacter</STRONG> does not contain any 
+hardblanks, it will disappear when horizontal fitting (kerning) or smushing 
+occurs.</P>
+<P>Again, if you design a <STRONG>FIGfont</STRONG>, please let us 
+know!</P></body>
+</html>

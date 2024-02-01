@@ -143,7 +143,7 @@ when <STRONG>FIGlet</STRONG> starts up. <STRONG>-C</STRONG> adds the given
 <U>control-file</U> list, cancelling the effect of any previous 
 <STRONG>-C</STRONG>. <STRONG>FIGlet</STRONG> executes the commands in all 
 <U>control-files</U> in the list. See&nbsp;<A 
-href="FIGlet_Font_Format.htm">FIGlet Font Format</A>        for details on how to 
+href="FIGfont.htm">  FIGfont</A>        for details on how to 
 write a <U>control-file</U>.</P>
 <UL>
   <LI>
@@ -413,5 +413,90 @@ Latin to Cyrillic, compatible with the <U>moscow</U> (not supplied).</P>
 mnemonic character set documented in RFC 1345. They implement a large subset of 
 Unicode (over 1800 characters) very crudely, using ASCII-based mnemonic 
 sequences, and are good for getting a quick at UTF-8 unicode files, using the 
-<U>control-file</U> <U>utf8</U>.</P></body>
+<U>control-file</U> <U>utf8</U>.</P> 
+<H3>ENVIRONMENT</H3> 
+<H4>FIGLET_FONTDIR</H4> 
+<P>If %<STRONG>FIGLET_FONTDIR</STRONG>% is set in system 
+environment variable, its value is used as a path to search for font files.</P> 
+<H3>FILES</H3> 
+<P>
+<TABLE style="BORDER-COLLAPSE: collapse" borderColor=#000000 cellSpacing=0 
+cellPadding=2 width="100%" border=1>
+  
+  <TR>
+    <TD>&nbsp;<U>file</U><STRONG>.flf</STRONG></TD>
+    <TD> 
+  <STRONG>&nbsp;FIGlet</STRONG> font file</TD></TR>
+  <TR>
+    <TD>&nbsp;<U>file</U><STRONG>.flc</STRONG></TD>
+    <TD><STRONG>&nbsp;FIGlet</STRONG> control 
+  file</TD></TR></TABLE></P>
+<H3>DIAGNOSTICS</H3>
+<P><STRONG>FIGlet's</STRONG> diagnostics are intened to be self-explanatory. 
+Possible messages are:</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=7 cols=120 readOnly>Usage: ...
+Out of memory
+Unable to open font file
+Not a FIGlet 2 font file
+Unable to open control file
+Not a FIGlet 2 control file
+"-t" is disabled, since ioctl is not fully implemented.
+</TEXTAREA></P>
+<P>This last message is printed when the <STRONG>-t</STRONG> 
+option is given, but the operating system in use does not include the system 
+call <STRONG>FIGlet</STRONG> uses to determine the terminal width.</P>
+<P><STRONG>FIGlet</STRONG> also prints an explanatory 
+message if the <STRONG>-F</STRONG> option is given on the command line. Ther 
+earlier version of <STRONG>FIGlet</STRONG>, version 2.0, listed the available 
+fonts when the <STRONG>-F</STRONG> option was given. This option has been 
+removed from <STRONG>FIGlet</STRONG> 2.1. It has been replaced by&nbsp;<A 
+href="figlist.bat.htm"><STRONG>FIGlist</STRONG></A> script, which is part of the 
+standard <STRONG>FIGlet</STRONG> package.</P>
+<H3>ORIGIN</H3>
+<P><STRONG>FIGlet</STRONG> stands for "Frank, Ian and 
+Glenn's LETters". Inspired by Frank's .sig, Glenn wrote (most of) it, and Ian 
+helped.</P>
+<P>Most of the standard <STRONG>FIGlet</STRONG> fonts were 
+inspired by signatures on various UseNet articles. Since typically hundreds of 
+people use the same style of letters in their signatures, it was often not 
+deemed necessary to give credit to any one font designer.</P>
+<H3>BUGS</H3>
+<P>Very little error checking is done on font and control 
+files. While <STRONG>FIGlet</STRONG> tries to be forgiving of errors, and should 
+(hopefully) never actually crash, using an improperly-formatted file with 
+<STRONG>FIGlet</STRONG> will produce unpredictable output.</P>
+<P><STRONG>FIGlet</STRONG> does not handle format characters 
+in a very intelligent way. A tab character is converted to a blank, and 
+vertical-tab, from-feed and carriage-return are each converted to a newline. On 
+many systems, tabs can be handled better by piping files through 
+<STRONG>expand</STRONG> before piping through <STRONG>FIGlet</STRONG>.</P>
+<P><STRONG>FIGlet</STRONG> output is quite ugly if it is 
+displayed in a proportionally-spaced font. I suppose this is to be expected.</P>
+<P>Please report any errors you find in the program and 
+this&nbsp;<STRONG>chm</STRONG> file&nbsp;to the <STRONG>FIGlet4Win</STRONG> 
+GitHub site (<A 
+href="https://github.com/Ace-Radom/figlet4win">https://github.com/Ace-Radom/figlet4win</A>). 
+Issues and PRs are always welcome.&nbsp;If it is a bug of the original 
+<STRONG>FIGlet</STRONG>, you may also report it to &lt;<A 
+href="mailto:info@figlet.org">info@figlet.org</A>&gt;.</P>
+<H3>AUTHORS</H3>
+<P>FIGlet was written mostly by Glenn Chappell &lt;<A 
+href="mailto:c486scm@semovm.semo.edu">c486scm@semovm.semo.edu</A>&gt;, Ian Chai 
+&lt;<A href="mailto:ianchai@usa.net">ianchai@usa.net</A>&gt; and has since moved 
+on to another FIGlet enthusiast, Christiaan Keet &lt;<A 
+href="mailto:info@figlet.org">info@figlet.org</A>&gt;. The latest maintenance is 
+conducted by Claudio Matsuoka &lt;<A 
+href="mailto:cmatsuoka@gmail.com">cmatsuoka@gmail.com</A>&gt;.</P>
+<P>FIGlet4Win is a fork of Claudio's FIGlet tree (<A 
+href="https://github.com/cmatsuoka/figlet">https://github.com/cmatsuoka/figlet</A>) 
+and maintained by Sichen Lyu &lt;<A 
+href="mailto:sichenradomlyu@gmail.com">sichenradomlyu@gmail.com</A>&gt;. Its 
+goal is to get FIGlet running on modern Windows just like it used to be.</P>
+<P>Sincere thanks to the former developers of FIGlet 
+project.</P>
+<P>       This manual page is based on the 
+original&nbsp;<STRONG>FIGlet</STRONG> man page and mainly&nbsp;written by the 
+former <STRONG>FIGlet</STRONG> developers. Some things have been changed by 
+Sichen Lyu&nbsp;in order to make it suitable to modern       Windows 
+systems.</P></body>
 </html>

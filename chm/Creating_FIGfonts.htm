@@ -1,0 +1,340 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Creating FIGfonts</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+</style>
+
+</head>
+
+<body>
+<H1> 
+ Creating FIGfonts</H1>
+<P>NOTE: <STRONG>FIGWin</STRONG> 1.0 is packaged with a 
+program called <STRONG>FIGfont</STRONG> 
+Editor for Windows 1.0, which is just that.&nbsp;There is no need to read 
+further if you intend to use it.&nbsp;However, the section&nbsp;<A 
+href="Control_Files.htm">Control Files</A> &nbsp;is still relevant.</P>
+<P>Since a <STRONG>FIGfont</STRONG> file is a text file, it can be created with 
+any text editing program on any platform, and will still be compatible with 
+FIGdrivers on all operating systems, except that the bytes used to indicate the 
+end of each text line may vary.&nbsp;(PC's use carriage return and linefeed at 
+the end of each line, Macintosh uses carriage return only, and UNIX uses 
+linefeed only.)</P>
+<P>This minor difference among operating systems is handled easily by setting 
+your FTP program to ASCII mode during upload or download.&nbsp;So there is no 
+need to be concerned about this as long as you remember to do this during file 
+transfer.</P>
+<P>The filename of a <STRONG>FIGfont</STRONG> file must end with ".flf", which 
+stands for "&lt;F&gt;IG&lt;L&gt;ettering &lt;F&gt;ont".&nbsp;&nbsp;&nbsp;The 
+first part of the filename should contain only letters, and should be lowercase 
+on operating systems which permit case sensitive filenames.&nbsp;The filename 
+should be unique in the first 8 characters, since some older file systems 
+truncate longer filenames.</P>
+<P>It is easier to modify an existing <STRONG>FIGfont</STRONG> than it is to 
+create a new one from scratch.&nbsp;The first step is to read and understand 
+this document. You may want to load "standard.flf" or another 
+<STRONG>FIGfont</STRONG> into a text editor as an example while you read.</P>
+<P>A <STRONG>FIGfont</STRONG> file contains three portions: a header line, 
+comments, and <STRONG>FIGcharacter</STRONG> data.</P>
+<H3>The Header Line</H3>
+<P>The header line gives information about the 
+<STRONG>FIGfont</STRONG>. Here is an example showing the names of all 
+parameters:</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=8 cols=120 readOnly>          flf2a$ 6 5 20 15 3 0 143 229
+            |  | | | |  |  | |  |   |
+           /  /  | | |  |  | |  |   \
+  Signature  /  /  | |  |  | |   \   Codetag_Count
+    Hardblank  /  /  |  |  |  \   Full_Layout*
+         Height  /   |  |   \  Print_Direction
+         Baseline   /    \   Comment_Lines
+          Max_Length      Old_Layout*
+</TEXTAREA></P>
+<P>* The two layout parameters are closely related and 
+fairly complex. (See <U>Interpretation of Layout Paramenters</U>).</P>
+<P>NOTE: The first five characters in the entire file must 
+be "flf2a".</P>
+<P>For those desiring a quick explanation, the above line 
+indicates that this <STRONG>FIGfont</STRONG> uses "$" to represent the hardblank 
+in <STRONG>FIGcharacter</STRONG> data, it has <STRONG>FIGcharacters</STRONG> 
+which are 6 lines tall, 5 of which are above the baseline, no line in the 
+<STRONG>FIGfont</STRONG> data is more than 20 columns wide, the default 
+horizontal layout is represented by the number 15, there are 3 comment lines, 
+the default print direction for this <STRONG>FIGfont</STRONG> is left-to-right, 
+a complete description of default and possible horizontal and vertical layouts 
+is represented by the number 143, and there are 229 code-tagged characters.</P>
+<P>The first seven parameters are required.&nbsp;The last three (Direction, 
+Full_Layout, and Codetag_Count, are not.&nbsp;This allows for backward 
+compatibility with older <STRONG>FIGfonts</STRONG>, but a 
+<STRONG>FIGfont</STRONG> without these parameters would force a 
+<STRONG>FIGdriver</STRONG> to "guess" (by means not described in this document) 
+the information it would expect to find in Full_Layout.&nbsp;For this reason, 
+inclusion of all parameters is strongly recommended.</P>
+<P>Future versions of this standard may add more parameters after 
+Codetag_Count.</P>
+<P>A description of each parameter follows:</P>
+<H4>Signature</H4>
+<P>The signature is the first five characters: "flf2a". The first four 
+characters "flf2" identify the file as compatible with <STRONG>FIGlet</STRONG> 
+version 2.0 or later (and <STRONG>FIGWin 1.0</STRONG>).&nbsp; The "a" is currently ignored, 
+but cannot be omitted. Different characters in the "a" location may mean 
+something in future versions of this standard. If so, you can be sure your 
+<STRONG>FIGfonts</STRONG> will still work if this character is "a".</P>
+<H4>Hardblank</H4>
+<P>Immediately following the signature is the hardblank 
+character.&nbsp;The hardblank character in the header line defines which 
+<STRONG>sub-character</STRONG> will be used to represent hardblanks in the 
+<STRONG>FIGcharacter</STRONG> data.</P>
+<H4>Height</H4>
+<P>The Height parameter specifies the consistent height of 
+every <STRONG>FIGcharacter</STRONG>, measured in 
+<STRONG>sub-characters</STRONG>.&nbsp;Note that ALL 
+<STRONG>FIGcharacters</STRONG> in a given <STRONG>FIGfont</STRONG> have the same 
+height, since this includes any empty space above or below. This is a 
+measurement from the top of the tallest <STRONG>FIGcharacter</STRONG> to the 
+bottom of the lowest hanging <STRONG>FIGcharacter</STRONG>, such as a lowercase 
+g.</P>
+<H4>Baseline</H4>
+<P>The Baseline parameter is the number of lines of 
+<STRONG>sub-characters</STRONG> from the baseline of a 
+<STRONG>FIGcharacter</STRONG> to the top of the tallest 
+<STRONG>FIGcharacter</STRONG>.&nbsp;The baseline of a <STRONG>FIGfont</STRONG> 
+is an imaginary line on top of which capital letters would rest, while the tails 
+of lowercase g, j, p, q, and y may hang below. In other words, Baseline is the 
+height of a <STRONG>FIGcharacter</STRONG>, ignoring any descenders.</P>
+<P>This parameter does not affect the output of 
+<STRONG>FIGlet 2.2</STRONG> or <STRONG>FIGWin 1.0</STRONG>, but future versions 
+or other future <STRONG>FIGdrivers</STRONG> may use it.&nbsp;The Baseline 
+parameter should be correctly set to reflect the true baseline as described 
+above. It is an error for Baseline to be less than 1 or greater than the Height 
+parameter.</P>
+<H4>Max_Length</H4>
+<P>The Max_Length parameter is the maximum length of any 
+line describing a <STRONG>FIGcharacter</STRONG>.&nbsp;This is usually the width 
+of the widest <STRONG>FIGcharacter</STRONG>, plus 2 (to accommodate endmarks as 
+described later.)&nbsp; However, you can (and probably should) set Max_Length 
+slightly larger than this as a safety measure in case your 
+<STRONG>FIGfont</STRONG> is edited to include wider 
+<STRONG>FIGcharacters</STRONG>. <STRONG>FIGlet</STRONG> (but not <STRONG>FIGWin 
+1.0</STRONG>) uses this number to minimize the memory taken up by a 
+<STRONG>FIGfont</STRONG>, which is important in the case of 
+<STRONG>FIGfonts</STRONG> with many <STRONG>FIGcharacters</STRONG>.</P>
+<H4>Old_Layout</H4>
+<P>See&nbsp;<U>Interpretation of Layout 
+Parameters</U>&nbsp;below.</P>
+<H4>Comment_Lines</H4>
+<P>Between the first line and the actual 
+<STRONG>FIGcharacters</STRONG> of the <STRONG>FIGfont</STRONG> are the comment 
+lines.&nbsp;The Comment_Lines parameter specifies how many lines there 
+are.&nbsp;Comments are optional, but recommended to properly document the origin 
+of a <STRONG>FIGfont</STRONG>.</P>
+<H4>Print_Direction</H4>
+<P>The Print_Direction parameter tells which direction the 
+font is to be printed by default.&nbsp;A value of 0 means left-to-right, and 1 
+means right-to-left.&nbsp;If this parameter is absent, 0 (left-to-right) is 
+assumed. Print_Direction may not specify vertical print, although 
+<STRONG>FIGdrivers</STRONG> are capable of vertical print.&nbsp;Versions of 
+<STRONG>FIGlet</STRONG> prior to 2.1 ignore this parameter.</P>
+<H4>Full_Layout</H4>
+<P>See&nbsp;<U>Interpretation of Layout 
+Parameters</U>&nbsp;below.</P>
+<H4>Codetag_Count</H4>
+<P>Indicates the number of code-tagged (non-required) 
+<STRONG>FIGcharacters</STRONG> in this 
+<STRONG>FIGfont</STRONG>.&nbsp;This is always equal to the total number of 
+<STRONG>FIGcharacters</STRONG> in the font minus 102.&nbsp;This parameter is 
+typically ignored by <STRONG>FIGdrivers</STRONG>, but can be used to verify that 
+no characters are missing from the end of the <STRONG>FIGfont</STRONG>. The 
+<STRONG>chkfont</STRONG> program will display the number of codetagged 
+characters in the <STRONG>FIGfont</STRONG> on which it is run, making it easy to 
+insert this parameter after a <STRONG>FIGfont</STRONG> is written.</P>
+<H3> Interpretation of Layout Parameters</H3>
+<P>Full_Layout describes ALL information about horizontal 
+and vertical layout: the default layout modes and potential smushing rules, even 
+when smushing is not a default layout mode.</P>
+<P>Old_Layout does not include all of the information 
+desired by the most recent <STRONG>FIGdrivers</STRONG>, which is the inspiration 
+for the creation of the new&nbsp;Full_Layout parameter.&nbsp;Old_Layout is still 
+required for backward compatibility, and <STRONG>FIGdrivers</STRONG> must be 
+able to interpret <STRONG>FIGfonts</STRONG> which do not have the Full_Layout 
+parameter.&nbsp;(See <U><STRONG>Standardized Capabilities of Current and Future 
+FIGdrivers</STRONG></U>.)</P>
+<P>Versions of <STRONG>FIGlet</STRONG> prior to 2.2 do not 
+recognize the Full_Layout parameter. Documentation accompanying 
+<STRONG>FIGlet</STRONG> versions prior to 2.2 refer to Old_Layout as 
+"smushmode", which is somewhat misleading since it can indicate layout modes 
+other than smushing.</P>
+<P>Old_Layout and Full_Layout must contain some redundant information.</P>
+<P>Setting the layout parameters is a matter of adding 
+numbers together ("code values").&nbsp;What follows is a chart of the meanings 
+of all code values. (You may skip down to&nbsp;<U>Setting Layout Parameters Step 
+by Step</U>&nbsp;if you prefer, or if you find this portion confusing.)</P>
+<P>Full_Layout: (Legal values 0 to 32767)</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=15 cols=120 readOnly>    1  Apply horizontal smushing rule 1 when smushing
+    2  Apply horizontal smushing rule 2 when smushing
+    4  Apply horizontal smushing rule 3 when smushing
+    8  Apply horizontal smushing rule 4 when smushing
+   16  Apply horizontal smushing rule 5 when smushing
+   32  Apply horizontal smushing rule 6 when smushing
+   64  Horizontal fitting (kerning) by default
+  128  Horizontal smushing by default (Overrides 64)
+  256  Apply vertical smushing rule 1 when smushing
+  512  Apply vertical smushing rule 2 when smushing
+ 1024  Apply vertical smushing rule 3 when smushing
+ 2048  Apply vertical smushing rule 4 when smushing
+ 4096  Apply vertical smushing rule 5 when smushing
+ 8192  Vertical fitting by default
+16384  Vertical smushing by default (Overrides 8192)
+</TEXTAREA></P>
+<P>When no smushing rules are included in Full_Layout for a 
+given axis, the meaning is that universal smushing shall occur, either by 
+default or when requested.</P>
+<P>Old_Layout: (Legal values -1 to 63)</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=8 cols=120 readOnly>    -1  Full-width layout by default
+     0  Horizontal fitting (kerning) layout by default*
+     1  Apply horizontal smushing rule 1 by default
+     2  Apply horizontal smushing rule 2 by default
+     4  Apply horizontal smushing rule 3 by default
+     8  Apply horizontal smushing rule 4 by default
+    16  Apply horizontal smushing rule 5 by default
+    32  Apply horizontal smushing rule 6 by default
+</TEXTAREA></P>
+<P>* When Full_Layout indicates UNIVERSAL smushing as a 
+horizontal default (i.e., when none of the code values of horizontal smushing 
+rules are included and code value 128 is included in Full_Layout) Old_Layout 
+must be set to 0 (zero).&nbsp;Older <STRONG>FIGdrivers</STRONG> which cannot 
+read the Full_Layout parameter are also incapable of universal 
+smushing.&nbsp;Therefore they would be directed to the "next best thing", which 
+is horizontal fitting (kerning).</P>
+<P>NOTE: You should NOT add the -1 value to any positive 
+code value for Old_Layout.&nbsp;This would be a logical contradiction.</P>
+<P>See <STRONG><U>Standardized Capabilities of Current and 
+Future FIGdrivers</U></STRONG> for the behavior of a <STRONG>FIGdriver</STRONG> 
+when the Full_Layout parameter is absent (presumably in an older 
+<STRONG>FIGfont</STRONG>).</P>
+<P>The following rules establish consistency between 
+Old_Layout and Full_Layout.</P>
+<UL>
+  <LI>
+<DIV><EM>If full width is to be the horizontal 
+  default</EM>: Old_Layout must be -1. Full_Layout must NOT include code values 
+64 nor 128.</DIV>
+  <LI>
+<DIV><EM>If horizontal fitting (kerning) is to be 
+  default</EM>: Old_Layout must be 0. Full_Layout must include code value 64. Full_Layout must NOT include 
+code value 128.</DIV>
+  <LI>
+<DIV><EM>If CONTROLLED smushing is to be the horizontal 
+  default</EM>: Old_Layout must be a positive number, represented by the added 
+  code values of all desired horizontal smushing rules. Full_Layout must include 
+  the code values for the SAME set of horizontal smushing rules as included in 
+  Old_Layout. Full_Layout must include code value      
+  128.</DIV>
+  <LI>
+<DIV><EM>If UNIVERSAL smushing is to be the horizontal 
+  default</EM>: Old_Layout must be 0. Full_Layout must include code value 128. 
+  Full_Layout must NOT include any code value under      
+  64.</DIV></LI></UL>
+<P>In general terms, if Old_Layout specifies horizontal 
+smushing rules, Full_Layout must specify the same set of horizontal rules, and 
+both must indicate the same horizontal default layout      
+mode.</P>
+<H3>Setting Layout Parameters Step by Step</H3>
+<P>The following step-by-step process will yield 
+correct and consistent values for the two layout parameters.&nbsp;You may skip this 
+if you find the explanations above easier to use.</P>
+<OL>
+  <LI>
+<DIV>Start with 0 for both numbers.</DIV></LI></OL>
+<P>Write "Old_Layout" and "Full_Layout" on a piece of paper. Write the number 0 
+next to each. The number 0 may be crossed out and changed several times 
+below.</P>
+<OL start="2">
+  <LI>Set the DEFAULT HORIZONTAL LAYOUT MODE.</LI></OL>
+  <P>If you want to use FULL WIDTH as the default, make 
+Old_Layout -1.</P>
+  <P>If you want to use HORIZONTAL FITTING (kerning) as the 
+default, Make Full_Layout 64.</P>
+  <P>If you want to use HORIZONTAL SMUSHING as the default, 
+Make Full_Layout 128.</P>
+<OL start="3">
+  <LI>
+  <DIV>Specify HOW TO SMUSH HORIZONTALLY WHEN 
+  SMUSHING.</DIV></LI></OL>
+  <P>If you want to use UNIVERSAL smushing for the horizontal 
+axis, go to step 4.</P>
+  <P>If you want to use CONTROLLED smushing for the horizontal 
+axis, add together the code values for all the horizontal smushing rules you 
+want from the list below to get the horizontal smushing rules 
+total.</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=8 cols=120 readOnly>EQUAL CHARACTER SMUSHING          1
+UNDERSCORE SMUSHING               2
+HIERARCHY SMUSHING                4
+OPPOSITE PAIR SMUSHING            8
+BIG X SMUSHING                   16
+HARDBLANK SMUSHING               32
+
+Horizontal smushing rules total: ___
+</TEXTAREA></P>
+<P>If Full_Layout is currently 128, change Old_Layout to the 
+horizontal smushing rules total. Increase Full_Layout by the horizontal smushing 
+rules total.</P>
+<P>If Full_Layout is currently 0 or 64, increase Full_Layout 
+by the horizontal smushing rules total.</P>
+<OL start="4">
+  <LI>
+<DIV>Set the DEFAULT VERTICAL LAYOUT MODE.</DIV></LI></OL>
+<P>If you want to use FULL HEIGHT as the default, go to 
+step 5.</P>
+<P>If you want to use VERTICAL FITTING as the default, 
+increase Full_Layout by 8192.</P>
+<P>If you want to use VERTICAL SMUSHING as the default, 
+increase Full_Layout by 16384.</P>
+<OL start="5">
+  <LI>
+<DIV>Specify HOW TO SMUSH VERTICALLY WHEN 
+  SMUSHING.</DIV></LI></OL>
+<P>If you want to use UNIVERSAL smushing for the vertical 
+axis, go to step 6.</P>
+<P>If you want to use CONTROLLED smushing for the vertical 
+axis, add together the code values for all the vertical smushing rules you want 
+from the list below to get the vertical smushing rules total.</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=7 cols=120 readOnly>EQUAL CHARACTER SMUSHING        256
+UNDERSCORE SMUSHING             512
+HIERARCHY SMUSHING             1024
+HORIZONTAL LINE SMUSHING       2048
+VERTICAL LINE SUPERSMUSHING    4096
+
+Vertical smushing rules total: ____
+</TEXTAREA></P>
+<P>Increase Full_Layout by the vertical smushing rules 
+total.</P>
+<OL start="6">
+  <LI>
+<DIV>You're done.</DIV></LI></OL>
+<P>The resulting value of Old_Layout will be a number from 
+-1 to 63. The resulting value of Full_Layout will be a number from 0 and 
+32767.</P>
+<H3>FIGFont Comments</H3>
+<P>After the header line are <STRONG>FIGfont 
+comments</STRONG>.&nbsp;The comments can be as many lines as you like, but 
+should at least include your name and Email address.</P>
+<P>Here is an example which also shows the header line.</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=4 cols=120 readOnly>flf2a$ 6 5 20 15 3 0 143
+Example by Glenn Chappell &lt;ggc@uiuc.edu&gt; 8/94
+Permission is hereby given to modify this font, as long as the
+modifier's name is placed on a comment line.
+</TEXTAREA></P>
+<P>Comments are not required, but they are 
+appreciated.&nbsp;Please comment your <STRONG>FIGfonts</STRONG>.</P>
+<P>Remember to adjust the Comment_Lines parameter as you 
+add lines to your comments. Don't forget that blank lines DO 
+count.</P></body>
+</html>

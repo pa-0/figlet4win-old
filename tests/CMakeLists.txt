@@ -1,8 +1,3 @@
-find_package(Python3 REQUIRED)
-if(NOT PYTHON3_FOUND)
-    message(FATAL "Cannot find Python3, cannot do tests")
-endif()
-
 add_test(
     NAME do_preparation
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/preparation.py ${CMAKE_SOURCE_DIR}/fonts ${CMAKE_BINARY_DIR}

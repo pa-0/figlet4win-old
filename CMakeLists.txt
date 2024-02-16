@@ -1,20 +1,22 @@
 cmake_minimum_required(VERSION 3.10)
-project(figlet4win VERSION 2.2.5 LANGUAGES C)
+project(figlet4win VERSION 2.2.5 LANGUAGES C CXX)
 
-option(FIGlet_Enable_TLF_FONTS "Enable support for Sam Hocevar's TOIlet fonts" ON)
+option(FIGLET_ENABLE_TLF_FONTS "Enable support for Sam Hocevar's TOIlet fonts" ON)
 
 if(DEFINED DEFAULT_FONT_FILE)
-    set(FIGlet_Default_Font_File ${DEFAULT_FONT_FILE})
+    set(FIGLET_DEFAULT_FONT_FILE ${DEFAULT_FONT_FILE})
 else()
-    set(FIGlet_Default_Font_File "standard")
+    set(FIGLET_DEFAULT_FONT_FILE "standard")
 endif()
 if(DEFINED DEFAULT_FONT_DIR)
-    set(FIGlet_Default_Font_Dir ${DEFAULT_FONT_DIR})
+    set(FIGLET_DEFAULT_FONT_DIR ${DEFAULT_FONT_DIR})
 else()
-    set(FIGlet_Default_Font_Dir "fonts")
+    set(FIGLET_DEFAULT_FONT_DIR "fonts")
 endif()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wall -Wno-unused-value")
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unused-value")
 
 set(FIGLET_SRC_LIST
     figlet.c
@@ -23,15 +25,50 @@ set(FIGLET_SRC_LIST
     inflate.c
 )
 
-if(${FIGlet_Enable_TLF_FONTS})
+find_package(OpenSSL REQUIRED)
+if(NOT OPENSSL_FOUND)
+    message(FATAL "Cannot find OpenSSL, please check environment")
+endif()
+find_package(Python3 REQUIRED)
+if(NOT PYTHON3_FOUND)
+    message(FATAL "Cannot find Python3, cannot do tests")
+endif()
+
+set(CURL_ZLIB OFF CACHE STRING "" FORCE)
+set(CURL_USE_LIBPSL OFF CACHE STRING "" FORCE)
+set(CURL_USE_LIBSSH2 OFF CACHE STRING "" FORCE)
+set(CURL_USE_LIBSSH OFF CACHE STRING "" FORCE)
+set(CURL_ENABLE_SSL ON CACHE INTERNAL "" FORCE)
+set(CURL_USE_OPENSSL ON CACHE STRING "" FORCE)
+set(CURL_ENABLE_EXPORT_TARGET OFF CACHE STRING "" FORCE)
+set(CURL_DISABLE_INSTALL ON CACHE STRING "" FORCE)
+# force disable curl install function
+set(BUILD_CURL_EXE OFF CACHE INTERNAL "" FORCE)
+set(BUILD_TESTING OFF)
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+    cmake_policy(SET CMP0010 NEW)
+    cmake_policy(SET CMP0135 NEW)
+endif()
+include(FetchContent)
+FetchContent_Declare(curl
+    URL https://github.com/curl/curl/releases/download/curl-8_5_0/curl-8.5.0.tar.xz
+    URL_HASH SHA256=42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750eeb
+    USES_TERMINAL_DOWNLOAD TRUE
+)
+FetchContent_MakeAvailable(curl)
+# download and unpack curl 8.5.0 src package
+
+if(${FIGLET_ENABLE_TLF_FONTS})
     add_definitions(-DTLF_FONTS)
     set(FIGLET_SRC_LIST
         ${FIGLET_SRC_LIST}
         utf8.c
     )
 endif()
-add_definitions(-DDEFAULTFONTDIR="${FIGlet_Default_Font_Dir}")
-add_definitions(-DDEFAULTFONTFILE="${FIGlet_Default_Font_File}")
+add_definitions(-DUNICODE)
+add_definitions(-D_UNICODE)
+add_definitions(-DDEFAULTFONTDIR="${FIGLET_DEFAULT_FONT_DIR}")
+add_definitions(-DDEFAULTFONTFILE="${FIGLET_DEFAULT_FONT_FILE}")
 
 include_directories(${CMAKE_SOURCE_DIR})
 add_subdirectory(fonts)
@@ -39,7 +76,7 @@ add_subdirectory(fonts)
 add_executable(figlet
     ${FIGLET_SRC_LIST}
 )
-if(${FIGlet_Enable_TLF_FONTS})
+if(${FIGLET_ENABLE_TLF_FONTS})
     target_link_libraries(figlet
         ws2_32
     )
@@ -48,24 +85,60 @@ add_executable(chkfont
     chkfont.c
 )
 add_executable(figinstall
-    figinstall.c
+    figinstall.cpp
+)
+target_link_libraries(figinstall
+    CURL::libcurl
+    OpenSSL::Crypto
+)
+target_include_directories(figinstall
+    PRIVATE
+        ${CURL_INCLUDE_DIR}
+        ${OPENSSL_INCLUDE_DIR}
 )
 
 enable_testing()
 add_subdirectory(tests)
 
 install(
-    TARGETS figlet chkfont figinstall
+    TARGETS figlet chkfont figinstall libcurl_shared
     RUNTIME DESTINATION .
 )
+# if using curl-8.5.0 src package directly, the name of the shared curl lib is libcurl_shared
 install(
     FILES ${FIGLET_FONT_CONTROL_FILES} ${FIGLET_FONT_FILES}
-    DESTINATION ${FIGlet_Default_Font_Dir}
+    DESTINATION ${FIGLET_DEFAULT_FONT_DIR}
 )
 install(
     FILES ${CMAKE_SOURCE_DIR}/figlist.bat ${CMAKE_SOURCE_DIR}/showfigfonts.bat
     DESTINATION .
 )
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/find_mingw_libgcc_s_seh.py
+    TIMEOUT 5
+    OUTPUT_VARIABLE MINGW_LIBGCC_S_SEH_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/find_mingw_libstdc++.py
+    TIMEOUT 5
+    OUTPUT_VARIABLE MINGW_LIBSTDCPP_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+install(
+    FILES ${MINGW_LIBGCC_S_SEH_PATH} ${MINGW_LIBSTDCPP_PATH}
+    DESTINATION .
+)
+if(EXISTS ${CMAKE_SOURCE_DIR}/doc/figlet4win.chm)
+    install(
+        FILES ${CMAKE_SOURCE_DIR}/figman.bat
+        DESTINATION .
+    )
+    install(
+        FILES ${CMAKE_SOURCE_DIR}/doc/figlet4win.chm
+        DESTINATION doc
+    )
+endif()
 
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})

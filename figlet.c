@@ -955,12 +955,24 @@ void getparams()
     }
 #if defined(_WIN32)
   if (fontdirname[1]!=':' || (fontdirname[2]!=DIRSEP2 || fontdirname[2]!=DIRSEP)){
+#if !defined(UNICODE) && !defined(_UNICODE)
     char buf[MAXPATHLEN];
     if (!GetModuleFileName(NULL,buf,MAXPATHLEN))
     {
       fprintf(stderr,"Fatal: failed to get FIGlet exe path\n");
       exit(1);
       }
+#else
+    TCHAR wbuf[MAXPATHLEN];
+    if (!GetModuleFileName(NULL,wbuf,MAXPATHLEN))
+    {
+      fprintf(stderr,"Fatal: failed to get FIGlet exe path\n");
+      exit(1);
+      }
+    char buf[MAXPATHLEN];
+    int convreqsize = WideCharToMultiByte(CP_ACP,0,wbuf,-1,NULL,0,NULL,NULL);
+    WideCharToMultiByte(CP_ACP,0,wbuf,-1,buf,convreqsize,NULL,NULL);
+#endif
     char* lastdirseppos;
     if ((lastdirseppos=strrchr(buf,DIRSEP2))!=NULL) {
       *lastdirseppos = '\0';

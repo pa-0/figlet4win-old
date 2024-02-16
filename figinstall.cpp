@@ -1,3 +1,4 @@
+#include<codecvt>
 #include<iostream>
 #include<iomanip>
 #include<cassert>
@@ -13,6 +14,10 @@
 #include"openssl/sha.h"
 
 #include<windows.h>
+
+#ifdef INFO
+#undef INFO
+#endif
 
 #ifdef ERROR
 #undef ERROR
@@ -35,6 +40,18 @@ const std::unordered_map<short,std::pair<std::string,std::string>> FIGFONT_ITEM_
     { TLF_T , { "TOIlet Font"         , ".tlf" } }
 };
 
+#ifndef NDEBUG
+
+#define INFO( msg )                                                                             \
+    std::cout << __FUNCTION__ << ": " << msg << std::endl;
+
+#else
+
+#define INFO( msg )                                                                             \
+    std::cout << msg << std::endl;
+
+#endif
+
 #define ERROR( msg )                                                                            \
     std::cerr << __FUNCTION__ << ": " << msg << std::endl;
 
@@ -44,7 +61,7 @@ const std::unordered_map<short,std::pair<std::string,std::string>> FIGFONT_ITEM_
     if ( curlcode != CURLE_OK )                                                                 \
     {                                                                                           \
         ERROR( "Failed to set " << #curloption << ": " << curl_easy_strerror( curlcode ) );     \
-        goto CLEANUP_SIGN;                                                                 \
+        goto CLEANUP_SIGN;                                                                      \
     }
 
 typedef struct {
@@ -245,6 +262,8 @@ std::filesystem::path download_remote_font_to_temp( const figfont_node_t& item )
         goto CLEANUP_SIGN;
     }
 
+    INFO( "Downloading " << item.full << " from " << url );
+
     CURL_SETOPT_IF_FAILED_GOTO_CLEANUP( curl , res , CURLOPT_HTTPGET , 1L );
     CURL_SETOPT_IF_FAILED_GOTO_CLEANUP( curl , res , CURLOPT_URL , url.c_str() );
     CURL_SETOPT_IF_FAILED_GOTO_CLEANUP( curl , res , CURLOPT_WRITEFUNCTION , curl_write_file_callback );
@@ -279,11 +298,13 @@ std::filesystem::path download_remote_font_to_temp( const figfont_node_t& item )
     }
     if ( sha256 != item.hash )
     {
-        ERROR( "Failed to validate the downloaded content" );
+        ERROR( "Failed to validate download content" );
         temp_file_path.clear();
         res = CURLE_GOT_NOTHING;
         goto CLEANUP_SIGN;
     }
+
+    INFO( "Download content validated" );
 
 CLEANUP_SIGN:
     if ( curl )
@@ -303,6 +324,12 @@ int main( int argc , char** argv ){
     SetConsoleCP( CP_UTF8 );
     SetConsoleOutputCP( CP_UTF8 );
 
+    if ( argc == 1 )
+    {
+        print_helpmsg();
+        exit( OK );
+    }
+
     int c;
     while ( ( c = getopt( argc , argv , "?hrLl:R" ) ) != -1 )
     {
@@ -318,8 +345,16 @@ int main( int argc , char** argv ){
     }
 
     curl_global_init( CURL_GLOBAL_ALL );
+
     int rc = OK;
+    int res;
     std::filesystem::path install_target;
+    std::filesystem::path chkfont_path;
+    TCHAR figinstall_path[MAX_PATH];
+    std::string chkfont_cmd;
+    std::wstring chkfont_cmd_w;
+    int conv_req_size;  // string <-> wstring convert required size
+    std::filesystem::path install_to_path;
 
     if ( opt_list )
     {
@@ -344,6 +379,7 @@ int main( int argc , char** argv ){
             rc = FAILED;
             goto curl_global_cleanup;
         }
+        INFO( "Got metadata from remote" )
         figfont_list_t font_list = parse_figfont_base_meta( meta );
         figfont_list_t match_list;
         for ( const auto& it : font_list )
@@ -374,15 +410,107 @@ int main( int argc , char** argv ){
                 if ( in >= 1 && in <= match_list.size() )
                 {
                     install_target = download_remote_font_to_temp( match_list[in - 1] );
+                    if ( match_list[in - 1].type != FLF_T )
+                    {
+                        restrictive_mode = false;
+                    }
                 }
             }
         } // more than one match results
         else
         {
             install_target = download_remote_font_to_temp( match_list[0] );
+            if ( match_list[0].type != FLF_T )
+            {
+                restrictive_mode = false;
+            }
         } // one result only
+    } // remote font
+    else
+    {
+        install_target = argv[argc - 1];
+    } // local font
+
+    if ( !GetModuleFileName( NULL , figinstall_path , MAX_PATH ) )
+    {
+        ERROR( "Failed to get FIGlet binary path" );
+        rc = FAILED;
+        goto curl_global_cleanup;
     }
 
+    if ( restrictive_mode )
+    {
+        chkfont_path = figinstall_path;
+        chkfont_path = chkfont_path.parent_path() / "chkfont.exe";
+        chkfont_cmd = std::string( "\"" ) + chkfont_path.string() + "\" " + install_target.string();
+        // `"xxx\chkfont.exe" xxx.flf`
+        chkfont_cmd_w = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes( chkfont_cmd );
+        conv_req_size = WideCharToMultiByte(
+            CP_ACP ,
+            0 ,
+            chkfont_cmd_w.c_str() ,
+            -1 ,
+            NULL ,
+            0 ,
+            NULL ,
+            NULL
+        );
+        chkfont_cmd.clear();
+        WideCharToMultiByte(
+            CP_ACP ,
+            0 ,
+            chkfont_cmd_w.c_str() ,
+            -1 ,
+            &chkfont_cmd[0] ,
+            conv_req_size ,
+            NULL ,
+            NULL
+        );
+        // convert command to ANSI charcode
+        res = system( chkfont_cmd.c_str() );
+        // call chkfont
+        if ( res != 0 )
+        {
+            ERROR( "Unexcepted format error occured" );
+            rc = FAILED;
+            goto curl_global_cleanup;
+        }
+    } // restrictive mode, call chkfont
+    
+    install_to_path = figinstall_path;
+    install_to_path = install_to_path.parent_path() / DEFAULTFONTDIR / install_target.filename();
+
+    if ( std::filesystem::exists( install_to_path ) )
+    {
+        char c;
+        while ( 1 )
+        {
+            std::cout << "This item already exists, overwrite? (y/n): ";
+            std::cin >> c;
+            if ( c == 'y' || c == 'Y' )
+            {
+                break;
+            }
+            else if ( c == 'n' || c == 'N' )
+            {
+                INFO( "Exiting" );
+                rc = OK;
+                goto curl_global_cleanup;
+            }
+        }
+    }
+
+    try {
+        std::filesystem::copy_file( install_target , install_to_path , std::filesystem::copy_options::overwrite_existing );
+    }
+    catch ( const std::filesystem::filesystem_error& e )
+    {
+        ERROR( "Failed to install target item: " << e.what() );
+        rc = FAILED;
+        goto curl_global_cleanup;
+    }
+
+    INFO( "Work dowe and success" );
 
 curl_global_cleanup:
     curl_global_cleanup();

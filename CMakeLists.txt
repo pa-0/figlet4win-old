@@ -14,6 +14,11 @@ else()
     set(FIGLET_DEFAULT_FONT_DIR "fonts")
 endif()
 
+file(
+    WRITE ${CMAKE_SOURCE_DIR}/VERSION
+    ${PROJECT_VERSION}
+)
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unused-value")

@@ -34,6 +34,12 @@ find_package(OpenSSL REQUIRED)
 if(NOT OPENSSL_FOUND)
     message(FATAL "Cannot find OpenSSL, please check environment")
 endif()
+get_filename_component(OPENSSL_ROOT_DIR ${OPENSSL_INCLUDE_DIR} DIRECTORY)
+set(OPENSSL_BIN_DIR "${OPENSSL_ROOT_DIR}/bin")
+# get openssl bin dir to search dynamic libs
+file(GLOB OPENSSL_CRYPTO_DLL "${OPENSSL_BIN_DIR}/libcrypto*.dll")
+file(GLOB OPENSSL_SSL_DLL "${OPENSSL_BIN_DIR}/libssl*.dll")
+# get target dlls with special name tags
 find_package(Python3 REQUIRED)
 if(NOT PYTHON3_FOUND)
     message(FATAL "Cannot find Python3, cannot do tests")
@@ -131,7 +137,7 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 install(
-    FILES ${MINGW_LIBGCC_S_SEH_PATH} ${MINGW_LIBSTDCPP_PATH}
+    FILES ${MINGW_LIBGCC_S_SEH_PATH} ${MINGW_LIBSTDCPP_PATH} ${OPENSSL_CRYPTO_DLL} ${OPENSSL_SSL_DLL}
     DESTINATION .
 )
 if(EXISTS ${CMAKE_SOURCE_DIR}/doc/figlet4win.chm)

@@ -355,6 +355,9 @@ int main( int argc , char** argv ){
     std::wstring chkfont_cmd_w;
     int conv_req_size;  // string <-> wstring convert required size
     std::filesystem::path install_to_path;
+    std::ifstream rFile;
+    std::ofstream wFile;
+    char copy_buf[1024];
 
     if ( opt_list )
     {
@@ -500,15 +503,31 @@ int main( int argc , char** argv ){
         }
     }
 
-    try {
-        std::filesystem::copy_file( install_target , install_to_path , std::filesystem::copy_options::overwrite_existing );
-    }
-    catch ( const std::filesystem::filesystem_error& e )
+    rFile.open( install_target , std::ios::in | std::ios::binary );
+    if ( !rFile.is_open() )
     {
-        ERROR( "Failed to install target item: " << e.what() );
+        INFO( install_target );
+        ERROR( "Failed to read install target item: " << strerror( errno ) );
         rc = FAILED;
         goto curl_global_cleanup;
     }
+    wFile.open( install_to_path , std::ios::out | std::ios::binary );
+    if ( !wFile.is_open() )
+    {
+        ERROR( "Failed to write install target item: " << strerror( errno ) );
+        rc = FAILED;
+        goto curl_global_cleanup;
+    }
+    while ( !rFile.eof() )
+    {
+        rFile.read( copy_buf , 1024 );
+        std::streamsize bRead = rFile.gcount();
+        wFile.write( copy_buf , bRead );
+    }
+    rFile.close();
+    wFile.close();
+    // fs::copy_file contains a bug in MinGW
+    // it cannot overwrite existing targets even if fs::copy_options::overwrite_existing is set
 
     INFO( "Work dowe and success" );
 

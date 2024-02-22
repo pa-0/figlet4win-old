@@ -1,4 +1,24 @@
 <CPackWiXPatch>
+    <CPackWiXFragment Id="#PRODUCT">
+        <Upgrade Id="CC11CD4A-3AEC-4D65-81ED-65790266A448">
+            <UpgradeVersion OnlyDetect="yes" Property="PREVIOUSFOUND"
+                Minimum="1.0.0" IncludeMinimum="yes"
+                Maximum="2.2.5" IncludeMaximum="no"/>
+            <UpgradeVersion OnlyDetect="yes" Property="NEWERFOUND"
+                Minimum="2.2.6" IncludeMinimum="yes" />
+            <UpgradeVersion OnlyDetect="yes" Property="SELFFOUND"
+                Minimum="2.2.5" IncludeMinimum="yes"
+                Maximum="2.2.5" IncludeMaximum="yes"/>
+        </Upgrade>
+        <DirectoryRef Id="CM_DP_fonts">
+            <Component Id="CleanupInstalledFontObj" Guid="CC11CD4A-3AEC-4D65-81ED-65790266A448">
+                <RemoveFile Id="CleanupInstalledFontObj" Name="*.*" On="uninstall"/>
+            </Component>
+        </DirectoryRef>
+        <Feature Id="MainApplication" Title="Main Application" Level="1">
+            <ComponentRef Id="CleanupInstalledFontObj"/>
+        </Feature>
+    </CPackWiXFragment>
     <CPackWiXFragment Id="CM_CP_figlet.exe">
         <Environment Id="FIGLET4WIN_BIN_DIR" Action="set" Part="last"
 			Name="PATH" Value="[INSTALL_ROOT]"

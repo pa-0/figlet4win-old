@@ -1,6 +1,6 @@
 add_test(
     NAME do_preparation
-    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/preparation.py ${CMAKE_SOURCE_DIR}/fonts ${CMAKE_BINARY_DIR}
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/preparation.py ${CMAKE_SOURCE_DIR}/${FIGLET_DEFAULT_FONT_DIR} ${CMAKE_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 add_test(
@@ -102,4 +102,8 @@ add_test(
 add_test(
     NAME right-to-left_smushing_with_JavE_font
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_righttoleftsmushingwithjavefont.py ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/test_righttoleftsmushingwithjavefont_res.txt ${CMAKE_CURRENT_SOURCE_DIR}/input.txt
+)
+add_test(
+    NAME do_cleanup
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cleanup.py ${CMAKE_BINARY_DIR}/${FIGLET_DEFAULT_FONT_DIR} ${CMAKE_BINARY_DIR}
 )

@@ -15,7 +15,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Revert to CMake 3.27
+        run: |
+          Get-ChildItem
+          choco uninstall cmake.install -x
+          choco install cmake.install --version=3.27.9
 
       - name: Git Commit Data
         uses: rlespinasse/git-commit-data-action@v1.5.0
@@ -35,7 +41,6 @@ jobs:
         run: cpack . -G WIX
 
       - name: Get version
-        if: ${{github.event_name == 'push'}}
         id: get-version
         uses: juliangruber/read-file-action@v1
         with:

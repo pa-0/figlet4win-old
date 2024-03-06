@@ -6,22 +6,11 @@
 @rem Replaces "figlet -F", which was removed from figlet version 2.1.
 @rem
 @rem Usage: figlist [ -d directory ]
-@rem
-@rem Warning: FIGlet version lower than 2.1.0 is not supported in this batch script
 
 @echo off
 setlocal enabledelayedexpansion
 
 set figlet_path="%~dp0figlet.exe"
-
-for /f "delims=" %%i in ('%figlet_path% -I1 2') do set figlet_version=%%i
-if "%figlet_version%"=="" (
-    set figlet_version=20000
-)
-if %figlet_version% lss 20100 (
-    echo FIGlet version lower than 2.1.0 is no longer supported
-    exit 1
-)
 
 set usage_msg=Usage: %~n0 [ -d directory ]
 

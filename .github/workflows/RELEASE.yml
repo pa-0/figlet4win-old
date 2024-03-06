@@ -1,10 +1,9 @@
-name: CMake Release Build Windows Server 2022
+name: FIGlet4Win Release
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    tags:
+      - "[0-9]*.[0-9]*.[0-9]*"
 
 env:
   BUILD_TYPE: Release
@@ -50,4 +49,11 @@ jobs:
         with:
           name: FIGlet4Win_Main_Release-${{env.GIT_COMMIT_SHORT_SHA}}
           path: ${{github.workspace}}/build/figlet4win-${{steps.get-version.outputs.content}}-win64.msi
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.13
+        with:
+          draft: true
+          files: ${{github.workspace}}/build/figlet4win-${{steps.get-version.outputs.content}}-win64.msi
+          fail_on_unmatched_files: true
 

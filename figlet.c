@@ -304,8 +304,7 @@ int get_columns()
 #ifdef __STDC__
 char *myalloc(size_t size)
 #else
-char *myalloc(size)
-int size;
+char *myalloc(int size)
 #endif
 {
   char *ptr;
@@ -331,8 +330,7 @@ int size;
 
 ****************************************************************************/
 
-int hasdirsep(s1)
-char *s1;
+int hasdirsep(char *s1)
 {
   if (strchr(s1, DIRSEP)) return 1;
   else if (strchr(s1, DIRSEP2)) return 1;
@@ -347,9 +345,7 @@ char *s1;
 
 ****************************************************************************/
 
-int suffixcmp(s1, s2)
-char *s1;
-char *s2;
+int suffixcmp(char *s1, char *s2)
 {
   int len1, len2;
 
@@ -373,8 +369,7 @@ char *s2;
 
 ****************************************************************************/
 
-void skiptoeol(fp)
-ZFILE *fp;
+void skiptoeol(ZFILE *fp)
 {
   int dummy;
 
@@ -397,10 +392,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-char *myfgets(line,maxlen,fp)
-char *line;
-int maxlen;
-ZFILE *fp;
+char *myfgets(char *line, int maxlen, ZFILE *fp)
 {
   int c = 0;
   char *p;
@@ -430,8 +422,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-void printusage(out)
-FILE *out;
+void printusage(FILE *out)
 {
   fprintf(out,
     "Usage: %s [ -cklnoprstvxDELNRSWX ] [ -d fontdirectory ]\n",
@@ -451,8 +442,7 @@ FILE *out;
 
 ****************************************************************************/
 
-void printinfo(infonum)
-int infonum;
+void printinfo(int infonum)
 {
   switch (infonum) {
     case 0: /* Copyright message */
@@ -498,9 +488,7 @@ int infonum;
   Reads a four-character magic string from a stream.
 
 ****************************************************************************/
-void readmagic(fp,magic)
-ZFILE *fp;
-char *magic;
+void readmagic(ZFILE *fp, char *magic)
 {
   int i;
 
@@ -517,8 +505,7 @@ char *magic;
   Skips whitespace characters from a stream.
 
 ****************************************************************************/
-void skipws(fp)
-ZFILE *fp;
+void skipws(ZFILE *fp)
 {
   int c;
   while (c=Zgetc(fp),isascii(c)&&isspace(c)) ;
@@ -533,9 +520,7 @@ ZFILE *fp;
   "0x" or "0X" for hexadecimal.  Ignores leading whitespace.
 
 ****************************************************************************/
-void readnum(fp,nump)
-ZFILE *fp;
-inchr *nump;
+void readnum(ZFILE *fp, inchr *nump)
 {
   int acc = 0;
   char *p;
@@ -592,8 +577,7 @@ inchr *nump;
 
 ****************************************************************************/
 
-inchr readTchar(fp)
-ZFILE *fp;
+inchr readTchar(ZFILE *fp)
 {
   inchr thechar;
   char next;
@@ -641,8 +625,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-inchr charsetname(fp)
-ZFILE *fp;
+inchr charsetname(ZFILE *fp)
 {
   inchr result;
 
@@ -663,9 +646,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-void charset(n, controlfile)
-int n;
-ZFILE *controlfile;
+void charset(int n, ZFILE *controlfile)
 {
   int ch;
 
@@ -717,9 +698,7 @@ ZFILE *controlfile;
 
 ****************************************************************************/
 
-ZFILE *FIGopen(name,suffix)
-char *name;
-char *suffix;
+ZFILE *FIGopen(char *name, char *suffix)
 {
   char *fontpath;
   ZFILE *fontfile;
@@ -759,8 +738,7 @@ ok:
 
 ****************************************************************************/
 
-void readcontrol(controlname)
-char *controlname;
+void readcontrol(char *controlname)
 {
   inchr firstch,lastch;
   char dashcheck;
@@ -1209,9 +1187,7 @@ void clearline()
 
 ****************************************************************************/
 
-void readfontchar(file,theord)
-ZFILE *file;
-inchr theord;
+void readfontchar(ZFILE *file, inchr theord)
 {
   int row,k;
   char templine[MAXLEN+1];
@@ -1399,8 +1375,7 @@ void linealloc()
 
 ****************************************************************************/
 
-void getletter(c)
-inchr c;
+void getletter(inchr c)
 {
   fcharnode *charptr;
 
@@ -1438,8 +1413,7 @@ inchr c;
 
 ****************************************************************************/
 
-outchr smushem(lch,rch)
-outchr lch,rch;
+outchr smushem(outchr lch, outchr rch)
 {
   if (lch==' ') return rch;
   if (rch==' ') return lch;
@@ -1577,8 +1551,7 @@ int smushamt()
 
 ****************************************************************************/
 
-int addchar(c)
-inchr c;
+int addchar(inchr c)
 {
   int smushamount,row,k,column;
   outchr *templine;
@@ -1633,8 +1606,7 @@ inchr c;
 
 ****************************************************************************/
 
-void putstring(string)
-outchr *string;
+void putstring(outchr *string)
 {
   int i,len;
   char c[10];
@@ -1751,8 +1723,7 @@ void splitline()
 
 ****************************************************************************/
 
-inchr handlemapping(c)
-inchr c;
+inchr handlemapping(inchr c)
 {
   comnode *cmptr;
 
@@ -1968,8 +1939,7 @@ inchr iso2022()
 inchr getinchr_buffer;
 int getinchr_flag;
 
-inchr ungetinchr(c)
-inchr c;
+inchr ungetinchr(inchr c)
 {
   getinchr_buffer = c;
   getinchr_flag = 1;
@@ -2083,9 +2053,7 @@ inchr getinchr()
 
 ****************************************************************************/
 
-int main(argc,argv)
-int argc;
-char *argv[];
+int main(int argc, char *argv[])
 {
 #ifdef _WIN32
   SetConsoleCP(CP_UTF8);

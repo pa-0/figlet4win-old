@@ -4,6 +4,7 @@
   FIGlet Copyright 1996, 1997, 1998, 1999, 2000, 2001 John Cowan
   FIGlet Copyright 2002 Christiaan Keet
   FIGlet Copyright 2011, 2012 Claudio Matsuoka
+  FIGlet4Win Copyright 2024 Sichen Lyu
   Portions written by Paul Burton and Christiaan Keet
   Internet: <info@figlet.org>
   FIGlet, along with the various FIGlet fonts and documentation, is
@@ -37,10 +38,17 @@
 /* Release 2.2.4 by Claudio Matsuoka, 26 Jan 2011: tlf2 font support */
 /* Release 2.2.5 by Claudio Matsuoka, 31 May 2012: flc licensing, minor fixes */
 
+/* FIGlet4Win (FIGlet for modern Windows) */
+/* port by Sichen Lyu */
+/* based on FIGlet 2.2.5 */
+/* Release 1.0.0 Mar 2024: finish of FIGlet Windows porting, first official release of FIGlet4Win */
+
 /*---------------------------------------------------------------------------
   DEFAULTFONTDIR and DEFAULTFONTFILE should be defined in the Makefile.
   DEFAULTFONTDIR is the full path name of the directory in which FIGlet
     will search first for fonts (the ".flf" files).
+  In FIGlet4Win, if the DEFAULTFONTDIR is not an absolute path, FIGlet4Win
+    will automatic change it to an absolute based on the executable path.
   DEFAULTFONTFILE is the filename of the font to be used if no other
     is specified (standard.flf is recommended, but any other can be
     used). This file should reside in the directory specified by
@@ -96,10 +104,10 @@ Note: '/' also used in filename in get_columns(). */
 #define DEFAULTFONTFILE "standard.flf"
 #endif
 
-#define DATE "31 May 2012"
+#define DATE FIGLET4WINBUILDTIME
 /* move DATE macro definition to here because DATE has been defined as an alias of double under windows */
-#define VERSION "2.2.5"
-#define VERSION_INT 20205
+#define VERSION FIGLET4WINVERSION
+#define VERSION_INT FIGLET4WINVERSIONINT
 
 #define FONTFILESUFFIX ".flf"
 #define FONTFILEMAGICNUMBER "flf2"
@@ -448,15 +456,15 @@ void printinfo(int infonum)
     case 0: /* Copyright message */
       printf("FIGlet Copyright (C) 1991-2012 Glenn Chappell, Ian Chai, ");
       printf("John Cowan,\nChristiaan Keet and Claudio Matsuoka\n");
-      printf("Internet: <info@figlet.org> ");
+      printf("Website: <info@figlet.org>\n");
+      printf("FIGlet4Win Copyright (C) 2024 Sichen Lyu\n");
       printf("Version: %s, date: %s\n\n",VERSION,DATE);
-      printf("FIGlet, along with the various FIGlet fonts");
+      printf("FIGlet4Win, along with the various FIGlet fonts");
       printf(" and documentation, may be\n");
-      printf("freely copied and distributed.\n\n");
-      printf("If you use FIGlet, please send an");
-      printf(" e-mail message to <info@figlet.org>.\n\n");
-      printf("The latest version of FIGlet is available from the");
-      printf(" web site,\n\thttp://www.figlet.org/\n\n");
+      printf("freely copied and distributed.\n");
+      printf("Contributes, bug reports and feature requests to FIGlet4Win");
+      printf(" are welcome.\n");
+      printf("Repo-site: <https://github.com/Ace-Radom/figlet4win>\n\n");
       printusage(stdout);
       break;
     case 1: /* Version (integer) */

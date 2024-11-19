@@ -1,0 +1,462 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Basic Definitions and Concepts</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+</style>
+
+</head>
+
+<body>
+<H1>Basic Definitions and Concepts</H1>
+<H3>FIGfont</H3>
+<P>A <STRONG>FIGfont</STRONG> is a file which represents 
+the graphical arrangement of characters representing larger characters. Since a 
+<STRONG>FIGfont</STRONG> file is a text file, it can be created with any text 
+editing program on any platform. The filename of a <STRONG>FIGfont</STRONG>
+file must end with ".flf", which stands for "FigLetteringFont".</P>
+<H3>FIGcharacters&nbsp;and Sub-characters</H3>
+<P>Because <STRONG>FIGfonts</STRONG> describe large 
+characters which consist of smaller characters, confusion can result when 
+descussing on or the other. Therefore, the terms 
+<STRONG>FIGcharacters</STRONG>&nbsp;and&nbsp;<STRONG>Sub-characters</STRONG> are 
+used, respectively.</P>
+<H3>FIGdriver</H3>
+<P>The term <STRONG>FIGdriver</STRONG> is used in this 
+document to encompass <STRONG>FIGlet</STRONG>, <STRONG>FIGWin</STRONG>, 
+<STRONG>FIGlet4Win</STRONG>, and any future programs which use 
+<STRONG>FIGfonts</STRONG>.</P>
+<H3>FIGure</H3>
+<P>A <STRONG>FIGure</STRONG> (thusly capitalized) is an 
+image created by a <STRONG>FIGdriver</STRONG>.</P>
+<H3>FIG</H3>
+<P>A bit of history:</P>
+<P>In Spring 1991, inspired by the Email signature of a 
+friend named Frank, and goaded on by Ian Chai, Glenn Chappell wrote a nifty 
+little 170-line C program called newban, which would create large letters out of 
+ordinary text characters.&nbsp;At the time, it was only compiled for UNIX. In 
+hindsight, we now call it <STRONG>FIGlet 1.0</STRONG>. FIGlet stands for &lt;F&gt;rank, 
+&lt;I&gt;an, and &lt;G&gt;lenn's &lt;let&gt;ters.&nbsp;In various incarnations, 
+newban circulated around the net for a couple of years.&nbsp;It had one font, 
+which included only lowercase letters.</P>
+<P>In early 1993, Ian decided newban was due for a few 
+changes, so together Ian and Glenn added the full ASCII character set, to start 
+with. First, though, Ian had to find a copy of the source, since Glenn had 
+tossed it away as not worth the disk space. Ian and Glenn discussed what could 
+be done with it, decided on a general re-write, and, 7 months later, ended up 
+with 888 lines, of code, 13 FIGfonts and documentation.&nbsp;This was 
+<STRONG>FIGlet 2.0</STRONG> , the first real release.</P>
+<P>To their great surprise, <STRONG>FIGlet</STRONG> took 
+the net by storm. They received floods of "FIGlet is great!" messages and a new 
+contributed <STRONG>FIGfont</STRONG> about once a week.&nbsp;To handle all the 
+traffic, Ian quickly set up a mailing list, Daniel Simmons kindly offered space 
+for an FTP site, several people volunteered to port <STRONG>FIGlet</STRONG>
+to non-Unix operating systems, ...and bug reports poured in.</P>
+<P>Because of these, and the need to make 
+<STRONG>FIGlet</STRONG> more "international", Ian and Glenn released a new 
+version of <STRONG>FIGlet</STRONG> which could handle non-ASCII character sets 
+and right-to-left printing.&nbsp;This was <STRONG>FIGlet 2.1</STRONG>, which, in 
+a couple of weeks, became <STRONG>FIGlet 2.1.1</STRONG>. This weighed in at 1314 
+lines, and there were over 60 <STRONG>FIGfonts</STRONG>.<BR>        
+<BR>By late 1996, 
+<STRONG>FIGlet</STRONG> had quite a following of fans subscribing to its mailing 
+list. It had been ported to MS-DOS, Macintosh, Amiga, Apple II GS, Atari ST, 
+Acorn and OS/2.&nbsp;<STRONG>FIGlet</STRONG> had been further updated, and there 
+were nearly 200 <STRONG>FIGfonts</STRONG>.</P>
+<P>John Cowan and Paul Burton are two 
+<STRONG>FIGlet</STRONG> fans who decided to create new versions.&nbsp;While John 
+wrote <STRONG>FIGlet 2.2</STRONG> using C, Paul wrote <STRONG>FIGWin 
+1.0</STRONG>, the first true GUI (Windows) implementation of 
+<STRONG>FIGlet</STRONG>, using Visual Basic. John and Paul worked together to 
+add new features to <STRONG>FIGfont</STRONG> files which could be read by both 
+programs, and together wrote this document, which we hope helps to establish 
+consistency in <STRONG>FIGfonts</STRONG> and help with the creation of future 
+<STRONG>FIGdrivers</STRONG>.&nbsp;<STRONG>FIGlet 2.2</STRONG> has about 4800 
+lines of code, of which over half is a support library for reading compressed 
+files.</P>
+<P>Three years later, in July 2005, <STRONG>FIGlet 
+2.2.2</STRONG> was released under a new License (the <EM>Academic Free License 
+2.1</EM>). This version has proved to 
+be very stable, and persisted for more five years until minor bugfixes and 
+another license change resulted in the release of <STRONG>FIGlet 2.2.3</STRONG> 
+in January 2011. All license concerns involving contributed code were solved and 
+<STRONG>FIGlet</STRONG> is now distributed under the 
+<EM>New BSD License</EM>. Contributed fonts amounted to more than 400.</P>
+<P><STRONG>FIGlet 2.2</STRONG> and <STRONG>FIGWin 
+1.0</STRONG> both allow greater flexibility by use of new information which can 
+be contained in <STRONG>FIGfont</STRONG> files without interfering with the 
+function of older <STRONG>FIGdrivers</STRONG>.</P>
+<P>In January 2024, Sichen Lyu accidentally saw 
+<STRONG>FIGlet</STRONG> on Wikipedia, and he found that this cool program cannot 
+be compiled directly under modern&nbsp;Windows system, but it was&nbsp;easy to 
+port. Since <STRONG>FIGWin</STRONG> was no longer maintained, he forked the 
+<STRONG>FIGlet</STRONG> git tree on GitHub (<A 
+href="https://github.com/cmatsuoka/figlet">https://github.com/cmatsuoka/figlet</A>) 
+and restarted <STRONG>FIGlet4Win</STRONG> project (<A 
+href="https://github.com/Ace-Radom/figlet4win">https://github.com/Ace-Radom/figlet4win</A>), 
+and began to port <STRONG>FIGlet 2.2.5</STRONG>, which was released in May 2012, 
+to Windows 10 and 11.</P>
+<H3>Layout Modes</H3>
+<P>A <STRONG>FIGdriver</STRONG> may arrange 
+<STRONG>FIGcharacters</STRONG> using one of three layout modes, which define the 
+spacing between <STRONG>FIGcharacters</STRONG>. The layout mode for the 
+horizontal axis may differ from the layout mode for the vertical axis. A default 
+choice is defined for each axis by every <STRONG>FIGfont</STRONG>.</P>
+<P>The three layout modes are:</P>
+<UL>
+  <LI>
+<DIV>Full Size (Separately called "Full Width" or "Full Height".)</DIV></LI></UL>
+<P>Represents each <STRONG>FIGcharacter</STRONG> occupying 
+the full width or height of its arrangement of <STRONG>sub-characters</STRONG>        
+as designed.</P>
+<UL>
+  <LI>
+<DIV>Fitting Only (Separately called "Kerning" or "Vertical Fitting".)</DIV></LI></UL>
+<P>Moves <STRONG>FIGcharacters</STRONG>  closer together until they touch. 
+Typographers use the term&nbsp;<EM>kerning</EM> for this phenomenon when 
+applied to the horizontal axis, but fitting also includes this as a vertical 
+behavior, for which there is apparently no established typographical term.</P>
+<UL>
+  <LI>
+<DIV>Smushing (Same term for both axes.)</DIV></LI></UL>
+<P>Moves <STRONG>FIGcharacters</STRONG> one step closer 
+after they touch, so thatthey partially occupy the same space. A 
+<STRONG>FIGdriver</STRONG> must decide what 
+<STRONG>sub-character</STRONG> to display at each junction. There are two ways of 
+making these decisions: by controlled smushing or by universal smushing.</P>
+<P>Controlled smushing uses a set of <STRONG>smushing 
+rules</STRONG> selected by the designer of a FIGfont. 
+(See <U><STRONG>Smushing Rules</STRONG></U> below.) Each rule is a comparison of the two 
+<STRONG>sub-characters</STRONG> which must be joined to yield what to display at the       
+junction.</P>
+<P>Universal smushing simply overrides the 
+<STRONG>sub-character</STRONG> from the earlier <STRONG>FIGcharacter</STRONG> 
+with the sub-character from the later <STRONG>FIGcharacter</STRONG>. This 
+produces an "overlapping" effect with some <STRONG>FIGfonts</STRONG>, wherin the 
+latter <STRONG>FIGcharacter</STRONG> may appear to be "in front".</P>
+<P>A <STRONG>FIGfont</STRONG> which does not specify any <STRONG>smushing 
+rules</STRONG> for a particular axis 
+indicates that universal smushing is to occur when smushing is requested. 
+Therefore, it is not possible for a <STRONG>FIGfont</STRONG> designer to 
+"forbid" smushing. However there are ways to ensure that smushing does not cause 
+a <STRONG>FIGfont</STRONG> to be illegible when smushed. This is especially 
+important for smaller <STRONG>FIGfonts</STRONG>. (See <U><STRONG>Hardblanks</STRONG></U> for details.)</P>
+<P>
+<HR>
+<P></P>
+<P>For vertical fitting or smushing, entire lines of output FIGcharacters are 
+"moved" as a unit.</P>
+<P>Not all <STRONG>FIGdrivers</STRONG>   do vertical fitting or smushing. At present, 
+<STRONG>FIGWin 1.0</STRONG> does, but <STRONG>FIGlet 2.2</STRONG> does not. 
+Further, while <STRONG>FIGlet 2.2</STRONG> allows the user to override the 
+<STRONG>FIGfont</STRONG> designer's set of smushing rules, <STRONG>FIGWin 
+1.0</STRONG> does not.</P>
+<P>NOTE: In the documentation of <STRONG>FIGlet</STRONG> versions prior to 2.2, the term "smush-mode" 
+was used to mean the layout mode, and this term further included the 
+<STRONG>smushing rules</STRONG> (if any) to be applied. However, since the layout 
+mode may or may not involve smushing, we are straying from the use of this 
+somewhat misleading term.</P>
+<H3>Smushing Rules</H3>
+<P>Again, <STRONG>smushing rules</STRONG> are for controlled 
+smushing. If none are defined to be active in a <STRONG>FIGfont</STRONG>, 
+universal smushing occurs instead.</P>
+<P>Generally, if a <STRONG>FIGfont</STRONG> is "drawn at the 
+borders" using <STRONG>sub-characters</STRONG> 
+<CODE>-_|/\[]{}()&lt;&gt;</CODE>, you will want to use controlled 
+smushing by selecting from the rules below. Otherwise, if your 
+<STRONG>FIGfont</STRONG> uses a lot of other <STRONG>sub-characters</STRONG>, do 
+not select any rules and universal smushing will occur instead. (See 
+<STRONG><U>Hardblanks</U></STRONG> below if your <STRONG>FIGfont</STRONG> is 
+very small and would become illegible if smushed.) Experimentation is the best 
+way to make these decisions.</P>
+<P>There are six possible horizontal <STRONG>smushing 
+rules</STRONG> and five possible vertical <STRONG>smushing rules</STRONG>. Below 
+is a description of all the rules.</P>
+<P>NOTE: Ignore the "code values" for now. They are explained later. </P>
+<H4>The Six Horizontal Smushing Rules</H4>
+<OL>
+  <LI>
+<DIV>EQUAL CHARACTER SMUSHING (code value 1) </DIV></LI></OL>
+<P>Two <STRONG>sub-characters</STRONG> are smushed into a 
+single <STRONG>sub-character</STRONG> if they are the same. This rule does not 
+smush hardblanks. (See <STRONG><U>Hardblanks</U></STRONG> below.)</P>
+<OL start="2">
+  <LI>
+<DIV>UNDERSCORE SMUSHING (code value 2)</DIV></LI></OL>
+<P>An underscope ("_") will be replaced by any of: "|", "/", 
+"\", "[", "]", "{", "}", "(", ")", "&lt;" or "&gt;".</P>
+<OL start="3">
+  <LI>
+<DIV>HIERARCHY SMUSHING (code value 4)</DIV></LI></OL>
+<P>A hierarchy of six classes is used: "|", "/\", "[]", 
+"{}", "()" and&nbsp;"&lt;&gt;". When two smushing 
+<STRONG>sub-characters</STRONG> are from different classes, the one from the 
+latter class will be used.</P>
+<OL start="4">
+  <LI>
+<DIV>OPPOSITE PAIR SMUSHING (code value 8)</DIV></LI></OL>
+<P>Smushes opposing brackets ("[]" or "]["), braces ("{}" 
+or "}{") and parentheses ("()" or ")(") together, replacing any such pair with a 
+vertical bar ("|").</P>
+<OL start="5">
+  <LI>
+<DIV>BIG X SMUSHING (code value 16)</DIV></LI></OL>
+<P>Smushes "/\" into "|", "\/" into "Y", and "&gt;&lt;" 
+into "X". Note that "&lt;&gt;" is not smushed in any way by this rule. The name 
+"BIG X" is historical; originally all three pairs were smushed into "X".</P>
+<OL start="6">
+  <LI>
+<DIV>HARDBLANK SMUSHING (code value 32)</DIV></LI></OL>
+<P>Smushes two hardblanks together, replacing them with a 
+single hardblank. (See <STRONG><U>Hardblanks</U></STRONG> below.)</P>
+<H4>The Fixed Vertical Smushing Rules</H4>
+<OL>
+  <LI>
+<DIV>EQUAL CHARACTER SMUSHING (code value 256)</DIV>
+  <LI>
+<DIV>UNDERSCORE SMUSHING (code value 512)</DIV>
+  <LI>
+<DIV>HIERARCHY SMUSHING (code vaule 1024)</DIV></LI></OL>
+<P>They are same as horizontal <STRONG>smushing 
+rules</STRONG> 1-3.</P>
+<OL start="4">
+  <LI>
+<DIV>HORIZONTAL LINE SMUSHING (code value 2048)</DIV></LI></OL>
+<P>Smushes stacked pairs of "-" and "_", replacing them 
+with a single "=" <STRONG>sub-character</STRONG>. It does not matter which is 
+found above the other. Note that vertical <STRONG>smushing rule</STRONG> 1 will 
+smush IDENTICAL pairs of horizontal lines, while this rule smushes horizontal 
+lines consisting of DIFFERENT <STRONG>sub-characters</STRONG>.</P>
+<OL start="5">
+  <LI>
+<DIV>VERTICAL LINE SUPERSMUSHING (code value 4096)</DIV></LI></OL>
+<P>This one rule is different from all others, in that it 
+"supersmushes" vertical lines consisting of several vertical bars ("|"). This 
+creates the illusion that <STRONG>FIGcharacters</STRONG> have slid vertically 
+against each other. Supersmushing continues until any 
+<STRONG>sub-characters</STRONG> other than "|" would have to 
+be <STRONG>smushed</STRONG>. 
+Supersmushing can produce impressive results, but it is seldom possible, since 
+other <STRONG>sub-characters</STRONG> would usually have to be considered for 
+smushing as soon as any such stacked vertical lines are encountered.</P>
+<H3>Hardblanks</H3>
+<P>A <STRONG>hardblank</STRONG> is a special <STRONG>sub-character</STRONG> 
+which is displayed as a blank (space) in rendered <STRONG>FIGures</STRONG>, but 
+is treated more like&nbsp;a "visible" <STRONG>sub-character</STRONG> when 
+fitting or smushing horizontally. Therefore, hardblanks keep adjacent 
+<STRONG>FIGcharacters</STRONG> a certain distance apart.</P>
+<P>NOTE: <STRONG>Hardblanks</STRONG>  act the same as blanks for vertical 
+operations.</P>
+<P><STRONG>Hardblanks</STRONG> have three purposes:</P>
+<OL>
+  <LI>
+<DIV><STRONG>Hardblanks</STRONG> are used to create the blank (space) 
+<STRONG>FIGcharacter</STRONG>.</DIV></LI></OL>
+<P>Usually the space <STRONG>FIGcharacter</STRONG> is 
+simply one or two vertical columns of hardblanks. Some slanted 
+<STRONG>FIGfonts</STRONG> as shown below bave a diagonal arrangement of 
+<STRONG>hardblanks</STRONG> instead.</P>
+<OL start="2">
+  <LI>
+<DIV>&nbsp;<STRONG>Hardblanks</STRONG> can prevent 
+"unreasonable" fitting or smushing.</DIV></LI></OL>
+<P>Normally when fitting or smushing, the blank (space) 
+<STRONG>sub-character</STRONG> is considered "vacant space". In the following 
+example, a capital "C" <STRONG>FIGcharacter</STRONG> is smushed with a "minus" 
+<STRONG>FIGcharacter</STRONG>.</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=6 cols=120 readOnly>   ______                        ______
+  / ____/                       / ____/
+ / /      ____  &gt;&gt;-Becomes-&gt;   / /  ____
+/ /___   /___/                / /__/___/
+\____/                        \____/
+
+</TEXTAREA></P>
+<P>The <STRONG>FIGure</STRONG> above looks like a captical 
+G. To prevent this, a <STRONG>FIGfont</STRONG> designer might place a 
+<STRONG>hardblank</STRONG> in the center of the capital C. In the following 
+example, the <STRONG>hardblank</STRONG> is represented as a "$":</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=6 cols=120 readOnly>   ______                        ______
+  / ____/                       / ____/
+ / /  $   ____  &gt;&gt;-Becomes-&gt;   / /   ____
+/ /___   /___/                / /___/___/
+\____/                        \____/
+
+</TEXTAREA></P>
+<OL start="3">
+  <LI>
+<DIV><STRONG>Hardblanks</STRONG> can prevent smushing 
+from making <STRONG>FIGfonts</STRONG> illegible.</DIV></LI></OL>
+<P>This legitimate purpose of hardblanks is often overused.&nbsp;If a 
+<STRONG>FIGfont</STRONG> designer is absolutely sure that smushing "visible" 
+<STRONG>sub-characters</STRONG> would make their <STRONG>FIGfont</STRONG> 
+illegible, <STRONG>hardblanks</STRONG> may be positioned at the end of each row 
+of <STRONG>sub-characters</STRONG>, against the visible 
+<STRONG>sub-characters</STRONG>, creating a barrier.</P>
+<P>With older <STRONG>FIGdrivers</STRONG>, using <STRONG>hardblanks</STRONG> for 
+this purpose meant that <STRONG>FIGcharacters</STRONG> would have to be 
+separated by at least one blank in output <STRONG>fIGures</STRONG>, since only a 
+<STRONG>hardblank</STRONG> could smush with another <STRONG>hardblank</STRONG>. 
+However with the advent of universal smushing, this is no longer necessary. 
+<STRONG>Hardblanks</STRONG> ARE overriden by any visible 
+<STRONG>sub-character</STRONG> when performing universal smushing. 
+<STRONG>Hardblanks</STRONG> still represent a "stopping point", but only AFTER 
+their locations are occupied.</P>
+<P>NOTE: Earlier it was stated that universal smushing 
+overrides the <STRONG>sub-character</STRONG> from the former 
+<STRONG>FIGcharacter</STRONG> with the <STRONG>sub-character</STRONG> from the 
+former <STRONG>FIGcharacter</STRONG> with the <STRONG>sub-character</STRONG> 
+from the latter <STRONG>FIGcharacter</STRONG>. <STRONG>Hardblanks</STRONG> (and 
+blanks or spaces) are the exception to this rule; they will always be overriden 
+by visible <STRONG>sub-characters</STRONG>, regardless of which 
+<STRONG>FIGcharacter</STRONG> contains the <STRONG>hardblank</STRONG>. This 
+ensures that no visible <STRONG>sub-characters</STRONG> "disappear".</P>
+<P>Therefore, one can design a <STRONG>FIGfont</STRONG> 
+with a default behavior of universal smushing, while the output 
+<STRONG>FIGure</STRONG> would LOOK like the effect of fitting, or even full size 
+if additional <STRONG>hardblanks</STRONG> are used. If a user "scales down" the 
+layout mode to fitting, the result would look like "extra spacing" between 
+<STRONG>FIGcharacters</STRONG>.</P>
+<P>Taking this concept further, a 
+<STRONG>FIGcharacter</STRONG> may also include extra blanks (spaces) on the left 
+side of each <STRONG>FIGcharacter</STRONG>, which would define the 
+<STRONG>FIGcharacter's</STRONG> width as slightly larger than required for the 
+visible <STRONG>sub-characters</STRONG> and <STRONG>hardblanks</STRONG>. With 
+such a <STRONG>FIGfont</STRONG>, a user who further "scales down" the layout 
+mode to full size would see even greater spacing.</P>
+<P>These techniques prevent horizontal smushing from 
+causing a <STRONG>FIGfont</STRONG> to become illegible, while offering greater 
+flexibility of output to users.</P>
+<P>NOTE: These techniques cannot be used to prevent 
+vertical smushing of visible <STRONG>sub-characters</STRONG>, since 
+<STRONG>hardblanks</STRONG> are not respected in the vertical axis. Although it 
+is possible to select only one vertical smushing rule which involves only 
+<STRONG>sub-characters</STRONG> which are not used in your 
+<STRONG>FIGfont</STRONG>, it is recommend that you do NOT do so. In our opinion, 
+most users would prefer to get what they ask for, rather than being told, in 
+effect: "I, the <STRONG>FIGfont</STRONG> designer, have decided that you 
+wouldn't like the results of vertical smushing, so I have prevented you from 
+trying it." Instead, we recommend setting the default behavior to either fitting 
+or full height, and either allowing universal smushing, or selecting vertical 
+smushing rules which seem most appropriate. A user of your 
+<STRONG>FIGfont</STRONG> will quickly see why you did not choose smushing as the 
+default vertical layout mode, and will agree with you.</P>
+<H3>Character Sets and Character Codes</H3>
+<P>When you type using your keyboard, you are actually 
+sending your computer a series of numbers.&nbsp;Each number must be interpreted 
+by your computer so that it knows what character to display. The computer uses a 
+list of definitions, called a <STRONG>character set</STRONG>.&nbsp;The numbers 
+which represent each character are called <STRONG>character codes</STRONG>.</P>
+<P>There are many <STRONG>character sets</STRONG>, most of which are 
+internationally accepted as standards.&nbsp;By far, the most common character 
+set is ASCII, which stands for "American Standard Code for Information 
+Interchange". ASCII identifies its characters with codes ranging from 0 to 
+127.</P>
+<P>NOTE: The term "ASCII art" has become well-understood to mean artistic images 
+which consist of characters on your screen (such as 
+<STRONG>FIGures</STRONG>).</P>
+<P>For a list of the printable ASCII characters with the corresponding codes, 
+see the section <U>Required Characters</U> in <A href="Creating_FIGfonts.htm">Creating 
+FIGFonts</A>.&nbsp;The other 
+ASCII codes in the range of 0 through 31 are "control characters" such as 
+carriage-return (code 13), linefeed/newline (code 10), tab (code 9), backspace 
+(code 8) or null (code 0).&nbsp;Code 127 is a delete in ASCII.</P>
+<P>Getting more technical for just a moment: A byte consisting of 8 bits (eight 
+1's or 0's) may represent a number from 0 to 255. Therefore, most computers have 
+DIRECT access to 256 characters at any given time.&nbsp;A character set which 
+includes 256 characters is called an 8-bit character set.</P>
+<P>For Latin-based languages, ASCII is almost always the first half of a larger 
+8-bit <STRONG>character set</STRONG>.&nbsp;Latin-1 is the most common example of 
+an 8-bit character set.&nbsp;Latin-1 includes all of ASCII, and adds characters 
+with codes from 128 to 255 which include umlauted ("double-dotted") letters and 
+characters with various other accents.&nbsp;In the United States, Windows and 
+most Unix systems have Latin-1 directly available.</P>
+<P>Most modern systems allow the possibility of changing 8-bit <STRONG>character 
+sets</STRONG>. On Windows systems, character sets are referred to as "code 
+pages". There are many other <STRONG>character sets</STRONG> which are not 
+mentioned here. DOS has its own <STRONG>character set</STRONG> (which also has 
+international variants) that includes graphics characters for drawing 
+lines.&nbsp;It is also an extension of ASCII.</P>
+<P>For some languages, 8-bit <STRONG>character sets</STRONG> are insufficient, 
+particularly on East Asian systems.&nbsp;Therefore, some systems allow 2 bytes 
+for each character, which multiplies the 256 possibilties by 256, resulting in 
+65536 possible characters.&nbsp; (Much more than the world will ever 
+need.)</P>
+<P>Unicode is a character set standard which is intended to fulfill the 
+worldwide need for a single <STRONG>character set</STRONG> which includes all 
+characters used worldwide. Unicode includes <STRONG>character codes</STRONG> from 0 to 65535, although at 
+present, only about 22,000 characters have been officially assigned and 
+named<STRONG> </STRONG>by the Unicode Consortium.&nbsp; The 
+alphabets and other writing systems representable with Unicode include all 
+Latin-alphabet systems, Greek, Russian and other Cyrillic-alphabet systems, 
+Hebrew, Arabic, the various languages of India, Chinese, Japanese, Korean, and 
+others.&nbsp;The existing Unicode symbols include chess pieces, astrological 
+signs, gaming symbols, telephones, pointing fingers, etc. --- just about any 
+type of <STRONG>FIGcharacter</STRONG> you may wish to create.&nbsp;Unicode is 
+constantly (but slowly) being extended to handle new writing systems and 
+symbols.&nbsp;Information on Unicode is available at <A 
+href="http://www.unicode.org">http://www.unicode.org</A> and at <A 
+href="ftp://unicode.org">ftp://unicode.org</A>.</P>
+<P>Unicode, Latin-1, and ASCII all specify the same meanings for overlapping 
+<STRONG>character codes</STRONG>:&nbsp; ASCII 65 = Latin-1 65 = Unicode 65 = 
+"A", formally known as "LATIN CAPITAL LETTER A".</P>
+<P>Since a keyboard usually has only about 100 keys, your computer may contain a 
+program called a "keyboard map", which will interpret certain keystrokes or 
+combinations of keystrokes as different character codes.&nbsp;Keyboard maps use 
+"mapping tables" to make these determinations.&nbsp;The appropriate keyboard 
+activity for a given character code may involve several keystrokes.&nbsp;Almost 
+all systems are capable of handling at least 8-bit <STRONG>character 
+sets</STRONG> (containing&nbsp;256 characters), so there is always an active 
+keyboard map, at least for those characters which are not actually painted on 
+the keys.&nbsp;(United States users may not even know that their computer can 
+interpret special keystrokes. Such keystrokes may be something similar to 
+holding down the ALT key while typing a character code on the numeric 
+keypad.&nbsp;Try it!)</P>
+<P>What does all this have to do with <STRONG>FIGfonts</STRONG>???</P>
+<P>First, it should be evident that it is best to use only ASCII characters for 
+<STRONG>sub-characters</STRONG> when possible. This will ensure portability to 
+different platforms.</P>
+<P><STRONG>FIGlet</STRONG> has gained international popularity, but early 
+versions were made to handle only <STRONG>FIGcharacters</STRONG> with assigned 
+character codes corresponding to ASCII.&nbsp;So, over the years there have been 
+four methods used to create "virtual mapping tables" within the program 
+itself:</P>
+<P><BLOCKQUOTE>
+  <P>The first method was simply to create <STRONG>FIGcharacters</STRONG> which 
+  do not look like the ASCII character set implies. For example, a FIGfont might 
+  contain Greek letters, and within its comments, it may say, "If you type A, 
+  you'll get a Greek Alpha" etc. With the advent of newer features, it is 
+  preferable not to use this method. Instead, when possible, add new 
+  <STRONG>FIGcharacters</STRONG> to existing <STRONG>FIGfonts</STRONG> or create 
+  new <STRONG>FIGfonts</STRONG> with <STRONG>FIGcharacters</STRONG> coded to 
+  match the expectations of ASCII/Latin-1/Unicode, and create an appropriate 
+  <STRONG>control file</STRONG>. (See&nbsp;<U><STRONG>Control 
+  Files</STRONG></U>&nbsp;below.) Remember that Unicode includes almost any 
+  character for which you may want to create a 
+<STRONG>FIGcharacter</STRONG>.</P>
+  <P>The second method was very specific, to accommodate the German audience. A 
+  special option was added to the <STRONG>FIGlet</STRONG> program which would 
+  re-route input characters "[", "\", and "]" to umlauted A, O and U, while "{", 
+  "|", and "}" would become the respective lowercase versions of these. Also, 
+  "~" was made to become the s-z character when this special option was used. 
+  This was called "the -D option." The addition of this feature meant that all 
+  compatible <STRONG>FIGfonts</STRONG> must contain these Deutsch (German) 
+  <STRONG>FIGcharacters</STRONG>, in addition to the ASCII 
+  <STRONG>FIGcharacters</STRONG>. Although this option is still available in the 
+  most recent version, it is no longer necessary, as the same result can be 
+  achieved by the newer features described below. However, the requirement for 
+  Deutsch <STRONG>FIGcharacters</STRONG> remains for backward compatibility. (Or 
+  at least zero-width <STRONG>FIGcharacters</STRONG> in their place.) </P>
+  <P>Later, <STRONG>FIGlet</STRONG> was made to accept <STRONG>control 
+  files</STRONG>, which are quite literally a form of mapping table. 
+  (See&nbsp;<STRONG><U>Control Files</U></STRONG>.) This was a 
+  significant advance for internationalization. </P>
+  <P><STRONG>FIGlet 2.2</STRONG> can now accept specially encoded formats of 
+  input text which imply more than one byte per character.</P></BLOCKQUOTE></body>
+</html>

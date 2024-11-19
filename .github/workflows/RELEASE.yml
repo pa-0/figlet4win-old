@@ -1,0 +1,59 @@
+name: FIGlet4Win Release
+
+on:
+  push:
+    tags:
+      - "[0-9]*.[0-9]*.[0-9]*"
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Revert to CMake 3.27
+        run: |
+          choco uninstall cmake.install -x
+          choco install cmake.install --version=3.27.9
+
+      - name: Git Commit Data
+        uses: rlespinasse/git-commit-data-action@v1.5.0
+
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C ${{env.BUILD_TYPE}}
+
+      - name: Pack
+        working-directory: ${{github.workspace}}/build
+        run: cpack . -G WIX
+
+      - name: Get version
+        id: get-version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ${{github.workspace}}/VERSION
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: FIGlet4Win_Main_Release-${{env.GIT_COMMIT_SHORT_SHA}}
+          path: ${{github.workspace}}/build/figlet4win-${{steps.get-version.outputs.content}}-win64.msi
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.13
+        with:
+          draft: true
+          files: ${{github.workspace}}/build/figlet4win-${{steps.get-version.outputs.content}}-win64.msi
+          fail_on_unmatched_files: true
+

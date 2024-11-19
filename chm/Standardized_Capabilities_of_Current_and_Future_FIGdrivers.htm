@@ -1,0 +1,152 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Standardized Capabilities of Current and Future FIGdrivers</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+</style>
+
+</head>
+
+<body>
+<H1> 
+ Standardized Capabilities of Current and Future 
+FIGdrivers</H1>
+<P> 
+ We assert the following as the "Law" of our 
+intentions:</P>
+<H3>Profit</H3>
+<P>All future <STRONG>FIGdrivers</STRONG> shall be FREE OF 
+CHARGE to the general public via the Internet.&nbsp;Any advertisements of other 
+works by the author must be in documentation only, and limited to ONE 
+"screenful", and shall not appear by normal program behavior, nor interfere with 
+normal behavior.&nbsp;No <STRONG>FIGdriver</STRONG> shall disable itself after a 
+set period of time or request "donations". No <STRONG>FIGdriver</STRONG> shall 
+offer any other FIGdriver with improved capability for creating 
+<STRONG>FIGures</STRONG> in exchange for money.</P>
+<H3>Required Features of Future Versions</H3>
+<P>Future <STRONG>FIGdrivers</STRONG> must read and process 
+FIGfont files as described in this document, but are not necessarily expected to 
+process <STRONG>control files</STRONG>, smush, perform fitting or kerning, 
+perform vertical operations, or even produce multiple lines in output 
+<STRONG>FIGures</STRONG>.</P>
+<H3>FIGdriver Names</H3>
+<P>Future <STRONG>FIGdrivers</STRONG> must be named to 
+include capitalized "FIG" and shall have an incremental version number specific 
+to its own platform.</P>
+<H3>Backwards Compatibility of Future Versions</H3>
+<P>Any future <STRONG>FIGdriver</STRONG> created for the 
+same platform as an existing <STRONG>FIGdriver</STRONG>, and using the same name 
+as the existing <STRONG>FIGdriver</STRONG>, shall be considered a new version of 
+the preceding <STRONG>FIGdriver</STRONG>, and shall contain all historical 
+comments of updates to past versions on the same platform, and shall have full 
+capability of the preceding versions. If the source code is not provided to the 
+general public, it shall be at least provided to any potential developers of 
+later versions, and such comments relating to past versions shall be accessible 
+to any user by other means or documentation. If a new program is created on a 
+platform that already has an existing <STRONG>FIGdriver</STRONG>, it must be 
+given a new and distinct name.&nbsp;This allows multiple 
+<STRONG>FIGdrivers</STRONG> to exist for the same platform with different 
+capabilities.</P>
+<P>The format of FIGfonts may not be modified to be 
+non-backwards compatible UNLESS:</P>
+<OL>
+  <LI>
+<DIV>The new format is easily editable as an ASCII text 
+  file, beginning with the characters "flf" followed by a sequential 
+  number.</DIV>
+  <LI>
+<DIV>At least all of the same information can be derived 
+  from the new format as the prior format (currently "flf2").&nbsp;This includes 
+  the main comments which give credit to the <STRONG>FIGfont</STRONG> 
+  designer.</DIV>
+  <LI>
+<DIV>Individuals are found who are willing and have the 
+  ability to either port or develop versions for at least UNIX, DOS, Windows, 
+  and Amiga which will read both the new formats AND the prior format (currently 
+  "flf2"), and retain the capability of past versions. It is intended that this 
+  will be expanded to include Macintosh if a GUI version exists. This list of 
+  required operating systems may be reduced if an operating system falls out of 
+  popularity or increased if a new operating system for which there is a 
+  <STRONG>FIGdriver</STRONG> comes into greater popularity, according to the 
+  consensus of opinions of past developers for the most popular operating 
+  systems.</DIV>
+  <LI>
+<DIV>A C, Java, or other version must always exist which 
+  can receive input and instructions either from a command line, a file, or 
+  directly over the internet so that <STRONG>FIGures</STRONG> can be obtained 
+  from internet-based services without the need to download any 
+  <STRONG>FIGdriver</STRONG>.</DIV>
+  <LI>
+<DIV>All existing <STRONG>FIGfonts</STRONG> available from 
+  the "official" point of distribution (<A 
+  href="http://www.figlet.org/">http://www.figlet.org/</A>), must be converted 
+  to the new format, and offered for download alongsidethe new 
+  versions.</DIV></LI></OL>
+<H3>The Function of Word Wapping</H3>
+<P>All future <STRONG>FIGdrivers</STRONG> should duplicate 
+these behaviors, unless a version is only capable of outputting one-line 
+<STRONG>FIGures</STRONG>, which is acceptable as long no preceding versions 
+exist for its platform which can output multiple-line 
+<STRONG>FIGures</STRONG>.</P>
+<P><STRONG>FIGdrivers</STRONG> which perform word wrapping do so by watching for 
+blanks (spaces) in input text, making sure that the <STRONG>FIGure</STRONG> is 
+no more wide than the maximum width allowed.</P>
+<P>Input text may also include linebreaks, so that a user may specify where 
+lines begin or end instead of relying on the word wrapping of the 
+<STRONG>FIGdriver</STRONG>. (Linebreaks are represented by different bytes on 
+different platforms, so each FIGdriver must watch for the appropriate linebreaks 
+for its particular platform.)</P>
+<P>When a <STRONG>FIGdriver</STRONG> word wraps and there are several 
+consecutive blanks in input text where the wrapping occured, the 
+<STRONG>FIGdriver</STRONG> will disregard all blanks until the next non-blank 
+input character is encountered. However, if blanks in input text immediately 
+follow a linebreak, or if blanks are the first characters in the input text, the 
+blanks will be "printed", moving any visible <STRONG>FIGcharacters</STRONG> 
+which follow on the same output line to the right. Similarly, if an image is 
+right-aligned, and blanks immediately precede linebreaks or the end of input 
+text, a <STRONG>FIGdriver</STRONG> will move an entire line of output 
+<STRONG>FIGcharacters</STRONG> to the left to make room for the blank 
+<STRONG>FIGcharacters</STRONG> until the left margin is encountered. (If the 
+print direction is right-to-left, everything stated in this paragraph is 
+reversed.)</P>
+<P>Word processing programs or text editors usually behave similarly in all 
+regards to word wrapping.</P>
+<H3>General Intent for Cross-Platform Portability</H3>
+<P>Currently, all versions of <STRONG>FIGlet</STRONG> are compiled from C code, 
+while <STRONG>FIGWin 1.0</STRONG> is written in Visual Basic.&nbsp;Over time it 
+is intended that a later version of <STRONG>FIGWin</STRONG> will be created 
+using a GUI C programming language, and that the <STRONG>FIGlet</STRONG> C code 
+shall continue to be written to be easily "plugged in" to a GUI shell.&nbsp;It 
+is preferable for developers of <STRONG>FIGdrivers</STRONG> for new platforms to 
+use C or a GUI version of C, so that when the core rendering engine of 
+<STRONG>FIGlet</STRONG> is updated, it will be portable to other platforms.</P>
+<H3>Control File Commands</H3>
+<P>New control file commands may be added to later versions of this standard. 
+However, the commands "c", "d", and "s" are permanently reserved and may never 
+be given a meaning.</P>
+<H3>File Compression</H3>
+<P><STRONG>FIGfonts</STRONG> (and <STRONG>control files</STRONG>) are often 
+quite long, especially if many <STRONG>FIGcharacters</STRONG> are included, or 
+if the <STRONG>FIGcharacters</STRONG> are large. Therefore, some 
+<STRONG>FIGdrivers</STRONG> (at present, only <STRONG>FIGlet 2.2</STRONG> or 
+later, and <STRONG>FIGlet4Win</STRONG>) allow compressed 
+<STRONG>FIGfonts</STRONG> and control files.</P>
+<P>The standard for <STRONG>FIG</STRONG> compression is to place the 
+<STRONG>FIGfont</STRONG> or <STRONG>control file</STRONG> into a ZIP archive. ZIP 
+archives can be created by the proprietary program PKZIP on DOS and Windows 
+platforms (modern Windows also have a built-in ZIP archiver) or by the free 
+program Info-Zip Zip on almost all platforms. More information on ZIP can be 
+obtained at <A href="http://www.cdrom.com/pub/infozip/Info-Zip.html">http://www.cdrom.com/pub/infozip/Info-Zip.html</A>.</P>
+<P>The ZIP archive must contain only a single file. Any 
+files in the archive after the first are ignored by <STRONG>FIGdrivers</STRONG>. In addition, the 
+standard extension ".zip" of the archive must be changed to ".flf" or ".flc" as 
+appropriate. It does not matter what the name of the file within the 
+archive is.</P></body>
+</html>

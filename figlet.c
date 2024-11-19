@@ -4,16 +4,13 @@
   FIGlet Copyright 1996, 1997, 1998, 1999, 2000, 2001 John Cowan
   FIGlet Copyright 2002 Christiaan Keet
   FIGlet Copyright 2011, 2012 Claudio Matsuoka
+  FIGlet4Win Copyright 2024 Sichen Lyu
   Portions written by Paul Burton and Christiaan Keet
   Internet: <info@figlet.org>
   FIGlet, along with the various FIGlet fonts and documentation, is
     copyrighted under the provisions of the New BSD License (3-clause)
     (as listed in the file "LICENSE" which is included in this package)
 ****************************************************************************/
-
-#define DATE "31 May 2012"
-#define VERSION "2.2.5"
-#define VERSION_INT 20205
 
 /* FIGlet (Frank, Ian & Glenn's Letters) */
 /* by Glenn Chappell */
@@ -41,21 +38,22 @@
 /* Release 2.2.4 by Claudio Matsuoka, 26 Jan 2011: tlf2 font support */
 /* Release 2.2.5 by Claudio Matsuoka, 31 May 2012: flc licensing, minor fixes */
 
+/* FIGlet4Win (FIGlet for modern Windows) */
+/* port by Sichen Lyu */
+/* based on FIGlet 2.2.5 */
+/* Release 1.0.0 Mar 2024: finish of FIGlet Windows porting, first official release of FIGlet4Win */
+
 /*---------------------------------------------------------------------------
   DEFAULTFONTDIR and DEFAULTFONTFILE should be defined in the Makefile.
   DEFAULTFONTDIR is the full path name of the directory in which FIGlet
     will search first for fonts (the ".flf" files).
+  In FIGlet4Win, if the DEFAULTFONTDIR is not an absolute path, FIGlet4Win
+    will automatic change it to an absolute based on the executable path.
   DEFAULTFONTFILE is the filename of the font to be used if no other
     is specified (standard.flf is recommended, but any other can be
     used). This file should reside in the directory specified by
     DEFAULTFONTDIR.
 ---------------------------------------------------------------------------*/
-#ifndef DEFAULTFONTDIR
-#define DEFAULTFONTDIR "fonts"
-#endif
-#ifndef DEFAULTFONTFILE
-#define DEFAULTFONTFILE "standard.flf"
-#endif
 
 #include <stdio.h>
 #ifdef __STDC__
@@ -69,6 +67,8 @@
 #if defined(unix) || defined(__unix__) || defined(__APPLE__)
 #include <unistd.h>
 #include <sys/ioctl.h> /* Needed for get_columns */
+#elif defined(_WIN32)
+#include <windows.h>   /* Needed for get_columns (Windows) */
 #endif
 
 #ifdef TLF_FONTS
@@ -83,8 +83,31 @@
 
 #define DIRSEP '/'
 #define DIRSEP2 '\\'
+#define DIRSEPSTR "/"
+#define DIRSEPSTR2 "\\"
 /* Leave alone for Unix and MS-DOS/Windows!
 Note: '/' also used in filename in get_columns(). */
+
+#if defined(__linux__)
+#include <limits.h>
+#define MAXPATHLEN PATH_MAX
+#elif defined(_WIN32)
+#define MAXPATHLEN MAX_PATH
+#else
+#define MAXPATHLEN 4096
+#endif
+
+#ifndef DEFAULTFONTDIR
+#define DEFAULTFONTDIR "fonts"
+#endif
+#ifndef DEFAULTFONTFILE
+#define DEFAULTFONTFILE "standard.flf"
+#endif
+
+#define DATE FIGLET4WINBUILDTIME
+/* move DATE macro definition to here because DATE has been defined as an alias of double under windows */
+#define VERSION FIGLET4WINVERSION
+#define VERSION_INT FIGLET4WINVERSIONINT
 
 #define FONTFILESUFFIX ".flf"
 #define FONTFILEMAGICNUMBER "flf2"
@@ -265,6 +288,15 @@ int get_columns()
   close(fd);
   return result?-1:ws.ws_col;
 }
+#elif defined(_WIN32)
+int get_columns()
+{
+  HANDLE hConsole = NULL;
+  if ((hConsole = GetStdHandle(STD_OUTPUT_HANDLE))==INVALID_HANDLE_VALUE) return -1;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  if (GetConsoleScreenBufferInfo(hConsole,&csbi)==0) return -1;
+  return csbi.dwSize.X;
+}
 #endif /* ifdef TIOCGWINSZ */
 
 
@@ -280,8 +312,7 @@ int get_columns()
 #ifdef __STDC__
 char *myalloc(size_t size)
 #else
-char *myalloc(size)
-int size;
+char *myalloc(int size)
 #endif
 {
   char *ptr;
@@ -307,8 +338,7 @@ int size;
 
 ****************************************************************************/
 
-int hasdirsep(s1)
-char *s1;
+int hasdirsep(char *s1)
 {
   if (strchr(s1, DIRSEP)) return 1;
   else if (strchr(s1, DIRSEP2)) return 1;
@@ -323,9 +353,7 @@ char *s1;
 
 ****************************************************************************/
 
-int suffixcmp(s1, s2)
-char *s1;
-char *s2;
+int suffixcmp(char *s1, char *s2)
 {
   int len1, len2;
 
@@ -349,8 +377,7 @@ char *s2;
 
 ****************************************************************************/
 
-void skiptoeol(fp)
-ZFILE *fp;
+void skiptoeol(ZFILE *fp)
 {
   int dummy;
 
@@ -373,10 +400,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-char *myfgets(line,maxlen,fp)
-char *line;
-int maxlen;
-ZFILE *fp;
+char *myfgets(char *line, int maxlen, ZFILE *fp)
 {
   int c = 0;
   char *p;
@@ -406,8 +430,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-void printusage(out)
-FILE *out;
+void printusage(FILE *out)
 {
   fprintf(out,
     "Usage: %s [ -cklnoprstvxDELNRSWX ] [ -d fontdirectory ]\n",
@@ -427,22 +450,21 @@ FILE *out;
 
 ****************************************************************************/
 
-void printinfo(infonum)
-int infonum;
+void printinfo(int infonum)
 {
   switch (infonum) {
     case 0: /* Copyright message */
       printf("FIGlet Copyright (C) 1991-2012 Glenn Chappell, Ian Chai, ");
       printf("John Cowan,\nChristiaan Keet and Claudio Matsuoka\n");
-      printf("Internet: <info@figlet.org> ");
+      printf("Website: <info@figlet.org>\n");
+      printf("FIGlet4Win Copyright (C) 2024 Sichen Lyu\n");
       printf("Version: %s, date: %s\n\n",VERSION,DATE);
-      printf("FIGlet, along with the various FIGlet fonts");
+      printf("FIGlet4Win, along with the various FIGlet fonts");
       printf(" and documentation, may be\n");
-      printf("freely copied and distributed.\n\n");
-      printf("If you use FIGlet, please send an");
-      printf(" e-mail message to <info@figlet.org>.\n\n");
-      printf("The latest version of FIGlet is available from the");
-      printf(" web site,\n\thttp://www.figlet.org/\n\n");
+      printf("freely copied and distributed.\n");
+      printf("Contributes, bug reports and feature requests to FIGlet4Win");
+      printf(" are welcome.\n");
+      printf("Repo-site: <https://github.com/Ace-Radom/figlet4win>\n\n");
       printusage(stdout);
       break;
     case 1: /* Version (integer) */
@@ -474,9 +496,7 @@ int infonum;
   Reads a four-character magic string from a stream.
 
 ****************************************************************************/
-void readmagic(fp,magic)
-ZFILE *fp;
-char *magic;
+void readmagic(ZFILE *fp, char *magic)
 {
   int i;
 
@@ -493,8 +513,7 @@ char *magic;
   Skips whitespace characters from a stream.
 
 ****************************************************************************/
-void skipws(fp)
-ZFILE *fp;
+void skipws(ZFILE *fp)
 {
   int c;
   while (c=Zgetc(fp),isascii(c)&&isspace(c)) ;
@@ -509,9 +528,7 @@ ZFILE *fp;
   "0x" or "0X" for hexadecimal.  Ignores leading whitespace.
 
 ****************************************************************************/
-void readnum(fp,nump)
-ZFILE *fp;
-inchr *nump;
+void readnum(ZFILE *fp, inchr *nump)
 {
   int acc = 0;
   char *p;
@@ -568,8 +585,7 @@ inchr *nump;
 
 ****************************************************************************/
 
-inchr readTchar(fp)
-ZFILE *fp;
+inchr readTchar(ZFILE *fp)
 {
   inchr thechar;
   char next;
@@ -617,8 +633,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-inchr charsetname(fp)
-ZFILE *fp;
+inchr charsetname(ZFILE *fp)
 {
   inchr result;
 
@@ -639,9 +654,7 @@ ZFILE *fp;
 
 ****************************************************************************/
 
-void charset(n, controlfile)
-int n;
-ZFILE *controlfile;
+void charset(int n, ZFILE *controlfile)
 {
   int ch;
 
@@ -693,9 +706,7 @@ ZFILE *controlfile;
 
 ****************************************************************************/
 
-ZFILE *FIGopen(name,suffix)
-char *name;
-char *suffix;
+ZFILE *FIGopen(char *name, char *suffix)
 {
   char *fontpath;
   ZFILE *fontfile;
@@ -735,8 +746,7 @@ ok:
 
 ****************************************************************************/
 
-void readcontrol(controlname)
-char *controlname;
+void readcontrol(char *controlname)
 {
   inchr firstch,lastch;
   char dashcheck;
@@ -923,11 +933,69 @@ void getparams()
   else {
     myname = Myargv[0];
     }
-  fontdirname = DEFAULTFONTDIR;
+  fontdirname = (char*)myalloc(MAXPATHLEN);
+  strcpy(fontdirname,DEFAULTFONTDIR);
   env = getenv("FIGLET_FONTDIR");
   if (env!=NULL) {
-    fontdirname = env;
+    strcpy(fontdirname,env);
     }
+#if defined(_WIN32)
+  if (fontdirname[1]!=':' || (fontdirname[2]!=DIRSEP2 || fontdirname[2]!=DIRSEP)){
+#if !defined(UNICODE) && !defined(_UNICODE)
+    char buf[MAXPATHLEN];
+    if (!GetModuleFileName(NULL,buf,MAXPATHLEN))
+    {
+      fprintf(stderr,"Fatal: failed to get FIGlet exe path\n");
+      exit(1);
+      }
+#else
+    TCHAR wbuf[MAXPATHLEN];
+    if (!GetModuleFileName(NULL,wbuf,MAXPATHLEN))
+    {
+      fprintf(stderr,"Fatal: failed to get FIGlet exe path\n");
+      exit(1);
+      }
+    char buf[MAXPATHLEN];
+    int convreqsize = WideCharToMultiByte(CP_ACP,0,wbuf,-1,NULL,0,NULL,NULL);
+    WideCharToMultiByte(CP_ACP,0,wbuf,-1,buf,convreqsize,NULL,NULL);
+#endif
+    char* lastdirseppos;
+    if ((lastdirseppos=strrchr(buf,DIRSEP2))!=NULL) {
+      *lastdirseppos = '\0';
+      strcat(buf,DIRSEPSTR2);
+      strcat(buf,fontdirname);
+      strcpy(fontdirname,buf);
+      }
+    }
+#elif defined(__linux__)
+  if (fontdirname[0]!='/') {
+    char buf[MAXPATHLEN];
+    if(readlink("/proc/self/exe",buf,sizeof(buf))==-1) {
+      fprintf(stderr,"Fatal: failed to get FIGlet exe path\n");
+      exit(1);
+      }
+    char* lastdirseppos;
+    if ((lastdirseppos=strrchr(buf,DIRSEP))!=NULL) {
+      *lastdirseppos = '\0';
+      strcat(buf,DIRSEPSTR);
+      strcat(buf,fontdirname);
+      strcpy(fontdirname,buf);
+      }
+    }
+#elif defined(__APPLE__)
+  if (fontdirname[0]!='/') {
+    char buf[MAXPATHLEN];
+    unsigned int bufsize = sizeof(buf);
+    _NSGetExecutablePath(buf,&bufsize);
+    char* lastdirseppos;
+    if ((lastdirseppos=strrchr(buf,DIRSEP))!=NULL) {
+      *lastdirseppos = '\0';
+      strcat(buf,DIRSEPSTR);
+      strcat(buf,fontdirname);
+      strcpy(fontdirname,buf);
+      }
+    }
+#endif
   fontname = DEFAULTFONTFILE;
   cfilelist = NULL;
   cfilelistend = &cfilelist;
@@ -1002,7 +1070,7 @@ void getparams()
 	smushoverride = SMO_YES;
         break;
       case 't':
-#ifdef TIOCGWINSZ
+#if defined(TIOCGWINSZ) || defined(_WIN32)
         columns = get_columns();
         if (columns>0) {
           outputwidth = columns;
@@ -1037,6 +1105,7 @@ void getparams()
           }
         break;
       case 'd':
+        free(fontdirname);
         fontdirname = optarg;
         break;
       case 'f':
@@ -1126,9 +1195,7 @@ void clearline()
 
 ****************************************************************************/
 
-void readfontchar(file,theord)
-ZFILE *file;
-inchr theord;
+void readfontchar(ZFILE *file, inchr theord)
 {
   int row,k;
   char templine[MAXLEN+1];
@@ -1316,8 +1383,7 @@ void linealloc()
 
 ****************************************************************************/
 
-void getletter(c)
-inchr c;
+void getletter(inchr c)
 {
   fcharnode *charptr;
 
@@ -1355,8 +1421,7 @@ inchr c;
 
 ****************************************************************************/
 
-outchr smushem(lch,rch)
-outchr lch,rch;
+outchr smushem(outchr lch, outchr rch)
 {
   if (lch==' ') return rch;
   if (rch==' ') return lch;
@@ -1494,8 +1559,7 @@ int smushamt()
 
 ****************************************************************************/
 
-int addchar(c)
-inchr c;
+int addchar(inchr c)
 {
   int smushamount,row,k,column;
   outchr *templine;
@@ -1550,8 +1614,7 @@ inchr c;
 
 ****************************************************************************/
 
-void putstring(string)
-outchr *string;
+void putstring(outchr *string)
 {
   int i,len;
   char c[10];
@@ -1668,8 +1731,7 @@ void splitline()
 
 ****************************************************************************/
 
-inchr handlemapping(c)
-inchr c;
+inchr handlemapping(inchr c)
 {
   comnode *cmptr;
 
@@ -1885,8 +1947,7 @@ inchr iso2022()
 inchr getinchr_buffer;
 int getinchr_flag;
 
-inchr ungetinchr(c)
-inchr c;
+inchr ungetinchr(inchr c)
 {
   getinchr_buffer = c;
   getinchr_flag = 1;
@@ -2000,10 +2061,14 @@ inchr getinchr()
 
 ****************************************************************************/
 
-int main(argc,argv)
-int argc;
-char *argv[];
+int main(int argc, char *argv[])
 {
+#ifdef _WIN32
+  SetConsoleCP(CP_UTF8);
+  SetConsoleOutputCP(CP_UTF8);
+  // windows wide char output
+#endif
+
   inchr c,c2;
   int i;
   int last_was_eol_flag;

@@ -1,0 +1,482 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>FIGcharacter Data</title>
+<meta name="GENERATOR" content="WinCHM">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+html,body { 
+	/* Default Font */
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11pt;
+}
+table {
+  table-layout: fixed;
+}
+</style>
+
+</head>
+
+<body>
+<H1>FIGcharacter Data</H1>
+<P>The <STRONG>FIGcharacter data</STRONG> begins on the 
+next line after the comments and continues to the end of the file.</P>
+<H3>Basic Data Structure</H3>
+<P>The <STRONG>sub-characters</STRONG> in the file are 
+given exactly as they should be output, with two exceptions:</P>
+<OL>
+  <LI>
+<DIV>Hardblanks should be the hardblank character 
+  specified in the header line, not 
+  a blank (space).</DIV>
+  <LI>
+<DIV>      
+    Every line has one or two endmark characters, whose 
+  column locations define the width of each 
+  <STRONG>FIGcharacter</STRONG>.</DIV></LI></OL>
+<P>In most <STRONG>FIGfonts</STRONG>, the endmark character 
+is either "@" or "#". The <STRONG>FIGdriver</STRONG> will eliminate the last 
+block of consecutive equal characters from each line of 
+<STRONG>sub-characters</STRONG> when the font is read in. By convention, the 
+last line of a <STRONG>FIGcharacter</STRONG> has two endmarks, while all the rest 
+have one. This makes it easy to see where <STRONG>FIGcharacters</STRONG> begin and end.&nbsp;No
+line should have more than two endmarks.</P>
+<P>Below is an example of the first few 
+<STRONG>FIGcharacters</STRONG>, taken from small.flf.</P>
+<P>NOTE: The line drawn below consisting of "|" represents 
+the left margin of your editor.&nbsp;It is NOT part of the 
+<STRONG>FIGfont</STRONG>.&nbsp;Also note that hardblanks
+are represented as "$" in this <STRONG>FIGfont</STRONG>, as would 
+be described in the header line.</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=25 cols=120 readOnly>                   |$@
+                   |$@
+      blank/space  |$@
+                   |$@
+                   |$@@
+                   | _ @
+                   || |@
+exclamation point  ||_|@
+                   |(_)@
+                   |   @@
+                   | _ _ @
+                   |( | )@
+     double quote  | V V @
+                   |  $  @
+                   |     @@
+                   |   _ _   @
+                   | _| | |_ @
+      number sign  ||_  .  _|@
+                   ||_     _|@
+                   |  |_|_|  @@
+                   |    @
+                   | ||_@
+      dollar sign  |(_-&lt;@
+                   |/ _/@
+                   | || @@
+</TEXTAREA></P>
+<P>Notice that each <STRONG>FIGcharacter</STRONG> occupies 
+the same number of lines (6 lines, in this case), which must also be expressed 
+in the header line as the Height parameter.</P>
+<P>Also notice that for every 
+<STRONG>FIGcharacter</STRONG>, there must be a consistent width (length) for 
+each line once the endmarks are removed.&nbsp;To do otherwise would be an 
+error.</P>
+<P>Be aware of the vertical alignment of each 
+<STRONG>FIGcharacter</STRONG> within its height, so that all 
+<STRONG>FIGcharacters</STRONG> will be properly lined up when printed.</P>
+<P>If one of the last <STRONG>sub-characters</STRONG> in a 
+particular <STRONG>FIGcharacter</STRONG> is "@", you should use another 
+character for the endmark in that <STRONG>FIGcharacter</STRONG> so that the 
+intended "@" is not interpreted as an endmark. "#" is a common alternative.</P>
+<P>Load a few existing <STRONG>FIGfonts</STRONG> into your 
+favorite text editor for other examples.</P>
+<H3>Required FIGcharacters</H3>
+<P>Some <STRONG>FIGcharacters</STRONG> 
+are required, and must be represented in a specific order. Specifically: all of 
+the printable character codes from ASCII shown in the table below, in order, 
+plus character codes 196, 214, 220, 228, 246, 252, and 223, in that 
+order.&nbsp;In Latin-1, these 
+extra 7 characters represent the following German characters: umlauted "A", "O", "U", 
+"a", "o" and "u"; and also "ess-zed".</P>
+<P>Printable portion of the ASCII character set:</P>
+<P><TABLE style="BORDER-COLLAPSE: collapse" borderColor=#000000 cellSpacing=0 
+cellPadding=2 width="60%" border=1>
+ 
+  <TR>
+    <TD>&nbsp;32</TD>
+    <TD>&nbsp;(blank / space)</TD>
+    <TD>&nbsp;64</TD>
+    <TD>&nbsp;@</TD>
+    <TD>&nbsp;96</TD>
+    <TD>&nbsp;`</TD></TR>
+  <TR>
+    <TD>&nbsp;33</TD>
+    <TD>&nbsp;!</TD>
+    <TD>&nbsp;65</TD>
+    <TD>&nbsp;A</TD>
+    <TD>&nbsp;97</TD>
+    <TD>&nbsp;a</TD></TR>
+  <TR>
+    <TD>&nbsp;34</TD>
+    <TD>&nbsp;"</TD>
+    <TD>&nbsp;66</TD>
+    <TD>&nbsp;B</TD>
+    <TD>&nbsp;98</TD>
+    <TD>&nbsp;b</TD></TR>
+  <TR>
+    <TD>&nbsp;35</TD>
+    <TD>&nbsp;#</TD>
+    <TD>&nbsp;67</TD>
+    <TD>&nbsp;C</TD>
+    <TD>&nbsp;99</TD>
+    <TD>&nbsp;c</TD></TR>
+  <TR>
+    <TD>&nbsp;36</TD>
+    <TD>&nbsp;$</TD>
+    <TD>&nbsp;68</TD>
+    <TD>&nbsp;D</TD>
+    <TD>&nbsp;100</TD>
+    <TD>&nbsp;d</TD></TR>
+  <TR>
+    <TD>
+      <P>&nbsp;37</P></TD>
+    <TD>&nbsp;%</TD>
+    <TD>&nbsp;69</TD>
+    <TD>&nbsp;E</TD>
+    <TD>&nbsp;101</TD>
+    <TD>&nbsp;e</TD></TR>
+  <TR>
+    <TD>&nbsp;38</TD>
+    <TD>&nbsp;&amp;</TD>
+    <TD>&nbsp;70</TD>
+    <TD>&nbsp;F</TD>
+    <TD>&nbsp;102</TD>
+    <TD>&nbsp;f</TD></TR>
+  <TR>
+    <TD>&nbsp;39</TD>
+    <TD>&nbsp;'</TD>
+    <TD>&nbsp;71</TD>
+    <TD>&nbsp;G</TD>
+    <TD>&nbsp;103</TD>
+    <TD>&nbsp;g</TD></TR>
+  <TR>
+    <TD>&nbsp;40</TD>
+    <TD>&nbsp;(</TD>
+    <TD>&nbsp;72</TD>
+    <TD>&nbsp;H</TD>
+    <TD>&nbsp;104</TD>
+    <TD>&nbsp;h</TD></TR>
+  <TR>
+    <TD>&nbsp;41</TD>
+    <TD>&nbsp;)</TD>
+    <TD>&nbsp;73</TD>
+    <TD>&nbsp;I</TD>
+    <TD>&nbsp;105</TD>
+    <TD>&nbsp;i</TD></TR>
+  <TR>
+    <TD>&nbsp;42</TD>
+    <TD>&nbsp;*</TD>
+    <TD>&nbsp;74</TD>
+    <TD>&nbsp;J</TD>
+    <TD>&nbsp;106</TD>
+    <TD>&nbsp;j</TD></TR>
+  <TR>
+    <TD>&nbsp;43</TD>
+    <TD>&nbsp;+</TD>
+    <TD>&nbsp;75</TD>
+    <TD>&nbsp;K</TD>
+    <TD>&nbsp;107</TD>
+    <TD>&nbsp;k</TD></TR>
+  <TR>
+    <TD>&nbsp;44</TD>
+    <TD>&nbsp;,</TD>
+    <TD>&nbsp;76</TD>
+    <TD>&nbsp;L</TD>
+    <TD>&nbsp;108</TD>
+    <TD>&nbsp;l</TD></TR>
+  <TR>
+    <TD>&nbsp;45</TD>
+    <TD>&nbsp;-</TD>
+    <TD>&nbsp;77</TD>
+    <TD>&nbsp;M</TD>
+    <TD>&nbsp;109</TD>
+    <TD>&nbsp;m</TD></TR>
+  <TR>
+    <TD>&nbsp;46</TD>
+    <TD>&nbsp;.</TD>
+    <TD>&nbsp;78</TD>
+    <TD>&nbsp;N</TD>
+    <TD>&nbsp;110</TD>
+    <TD>&nbsp;n</TD></TR>
+  <TR>
+    <TD>&nbsp;47</TD>
+    <TD>&nbsp;/</TD>
+    <TD>&nbsp;79</TD>
+    <TD>&nbsp;O</TD>
+    <TD>&nbsp;111</TD>
+    <TD>&nbsp;o</TD></TR>
+  <TR>
+    <TD>&nbsp;48</TD>
+    <TD>&nbsp;0</TD>
+    <TD>&nbsp;80</TD>
+    <TD>&nbsp;P</TD>
+    <TD>&nbsp;112</TD>
+    <TD>&nbsp;p</TD></TR>
+  <TR>
+    <TD>&nbsp;49</TD>
+    <TD>&nbsp;1</TD>
+    <TD>&nbsp;81</TD>
+    <TD>&nbsp;Q</TD>
+    <TD>&nbsp;113</TD>
+    <TD>&nbsp;q</TD></TR>
+  <TR>
+    <TD>&nbsp;50</TD>
+    <TD>&nbsp;2</TD>
+    <TD>&nbsp;82</TD>
+    <TD>&nbsp;R</TD>
+    <TD>&nbsp;114</TD>
+    <TD>&nbsp;r</TD></TR>
+  <TR>
+    <TD>&nbsp;51</TD>
+    <TD>&nbsp;3</TD>
+    <TD>&nbsp;83</TD>
+    <TD>&nbsp;S</TD>
+    <TD>&nbsp;115</TD>
+    <TD>&nbsp;s</TD></TR>
+  <TR>
+    <TD>&nbsp;52</TD>
+    <TD>&nbsp;4</TD>
+    <TD>&nbsp;84</TD>
+    <TD>&nbsp;T</TD>
+    <TD>&nbsp;116</TD>
+    <TD>&nbsp;t</TD></TR>
+  <TR>
+    <TD>&nbsp;53</TD>
+    <TD>&nbsp;5</TD>
+    <TD>&nbsp;85</TD>
+    <TD>&nbsp;U</TD>
+    <TD>&nbsp;117</TD>
+    <TD>&nbsp;u</TD></TR>
+  <TR>
+    <TD>&nbsp;54</TD>
+    <TD>&nbsp;6</TD>
+    <TD>&nbsp;86</TD>
+    <TD>&nbsp;V</TD>
+    <TD>&nbsp;118</TD>
+    <TD>&nbsp;v</TD></TR>
+  <TR>
+    <TD>&nbsp;55</TD>
+    <TD>&nbsp;7</TD>
+    <TD>&nbsp;87</TD>
+    <TD>&nbsp;W</TD>
+    <TD>&nbsp;119</TD>
+    <TD>&nbsp;w</TD></TR>
+  <TR>
+    <TD>&nbsp;56</TD>
+    <TD>&nbsp;8</TD>
+    <TD>&nbsp;88</TD>
+    <TD>&nbsp;X</TD>
+    <TD>&nbsp;120</TD>
+    <TD>&nbsp;x</TD></TR>
+  <TR>
+    <TD>&nbsp;57</TD>
+    <TD>&nbsp;9</TD>
+    <TD>&nbsp;89</TD>
+    <TD>&nbsp;Y</TD>
+    <TD>&nbsp;121</TD>
+    <TD>&nbsp;y</TD></TR>
+  <TR>
+    <TD>&nbsp;58</TD>
+    <TD>&nbsp;:</TD>
+    <TD>&nbsp;90</TD>
+    <TD>&nbsp;Z</TD>
+    <TD>&nbsp;122</TD>
+    <TD>&nbsp;z</TD></TR>
+  <TR>
+    <TD>&nbsp;59</TD>
+    <TD>&nbsp;;</TD>
+    <TD>&nbsp;91</TD>
+    <TD>&nbsp;[</TD>
+    <TD>&nbsp;123</TD>
+    <TD>&nbsp;{</TD></TR>
+  <TR>
+    <TD>&nbsp;60</TD>
+    <TD>&nbsp;&lt;</TD>
+    <TD>&nbsp;92</TD>
+    <TD>&nbsp;\</TD>
+    <TD>&nbsp;124</TD>
+    <TD>&nbsp;|</TD></TR>
+  <TR>
+    <TD>&nbsp;61</TD>
+    <TD>&nbsp;=</TD>
+    <TD>&nbsp;93</TD>
+    <TD>&nbsp;]</TD>
+    <TD>&nbsp;125</TD>
+    <TD>&nbsp;}</TD></TR>
+  <TR>
+    <TD>&nbsp;62</TD>
+    <TD>&nbsp;&gt;</TD>
+    <TD>&nbsp;94</TD>
+    <TD>&nbsp;^</TD>
+    <TD>&nbsp;126</TD>
+    <TD>&nbsp;~</TD></TR>
+  <TR>
+    <TD>&nbsp;63</TD>
+    <TD>&nbsp;?</TD>
+    <TD>&nbsp;95</TD>
+    <TD>&nbsp;_</TD>
+    <TD>&nbsp;</TD>
+    <TD>&nbsp;</TD></TR></TABLE>
+
+</P>Additional required 
+Deutsch <STRONG>FIGcharacters</STRONG>   , in order:
+<P><TABLE style="BORDER-COLLAPSE: collapse" borderColor=#000000 cellSpacing=0 
+cellPadding=2 width="40%" border=1>
+  
+  <TR>
+    <TD>&nbsp;196</TD>
+    <TD>&nbsp;umlauted "A": Ä</TD></TR>
+  <TR>
+    <TD>&nbsp;214</TD>
+    <TD>&nbsp;umlauted "O": Ö</TD></TR>
+  <TR>
+    <TD>&nbsp;220</TD>
+    <TD>&nbsp;umaluted "U": Ü</TD></TR>
+  <TR>
+    <TD>&nbsp;228</TD>
+    <TD>&nbsp;umlauted "a": ä</TD></TR>
+  <TR>
+    <TD>&nbsp;246</TD>
+    <TD>&nbsp;umlauted "o": ö</TD></TR>
+  <TR>
+    <TD>&nbsp;252</TD>
+    <TD>&nbsp;umlauted "u": ü</TD></TR>
+  <TR>
+    <TD>&nbsp;223</TD>
+    <TD>&nbsp;"ess-zed": ß</TD></TR></TABLE></P>
+<P>If you do not wish to define <STRONG>FIGcharacters</STRONG> for all of those 
+required above, you MAY create "empty" <STRONG>FIGcharacters</STRONG> in their 
+place by placing endmarks flush with the left margin. The Deutsch 
+<STRONG>FIGcharacters</STRONG> are commonly created as empty.&nbsp;If your 
+<STRONG>FIGfont</STRONG> includes only capital letters, please copy them to the 
+appropriate lowercase locations, rather than leaving lowercase letters 
+empty.&nbsp;A <STRONG>FIGfont</STRONG> which does not include at least all ASCII 
+letters, a space, and a few basic punctuation marks will probably frustrate some 
+users.&nbsp;(For example "@" is more frequently desired as a 
+<STRONG>FIGcharacter</STRONG> than you may think, since Email addresses may be 
+written as <STRONG>FIGures</STRONG>.)</P>
+<H3>Code Tagged FIGcharacters</H3>
+<P>After the required <STRONG>FIGcharacters</STRONG>, you 
+may create <STRONG>FIGcharacters</STRONG> with any character code in the range 
+of -2147483648 to +2147483647. (Over four billion possibilities, which is 
+"virtual infinity" for this purpose.)</P>
+<P>One exception: character code -1 is NOT allowed for 
+technical reasons. It is advisable to assign character codes such that the 
+appearance of your <STRONG>FIGcharacters</STRONG> matches the expectations of 
+ASCII/Latin-1/Unicode, with a few exceptions:</P>
+<OL>
+  <LI>
+<DIV>If a <STRONG>FIGcharacter</STRONG> with code 0 is 
+  present, it is treated specially.&nbsp;It is a <STRONG>FIGfont's</STRONG> 
+  "missing character".&nbsp;Whenever the <STRONG>FIGdriver</STRONG> is told to 
+  print a character which doesn't exist in the current <STRONG>FIGfont</STRONG>, 
+  it will print <STRONG>FIGcharacter</STRONG> 0. If there is no 
+  <STRONG>FIGcharacter</STRONG> 0, nothing will be printed.</DIV>
+  <LI>
+<DIV>  If a <STRONG>FIGfont </STRONG>contains a non-Latin 
+  alphabet in character codes in the ASCII range 32-126 (which is discouraged), 
+  we have found it helpful to include a human-readable translation table as one 
+  of the <STRONG>FIGcharacters</STRONG> instead of a "glyph".&nbsp;Typically, 
+  the "~" would contain this table.&nbsp;The translation table 
+  <STRONG>FIGcharacter</STRONG> would 
+  contain a list of all the special characters in the <STRONG>FIGfont</STRONG>, 
+  along with the ASCII characters to which they correspond.&nbsp;Keep this table 
+  no more than 79 columns wide. (Thanks to Gedaliah Friedenberg for this 
+  idea.)</DIV>
+  <LI>
+<DIV>  In more extensive Unicode fonts, you can assign a 
+  negative character code (other than -1) to one or more translation tables, 
+  similar to #2 above.&nbsp;(All Unicode character codes are positive.) And, you 
+  will most likely suggest within the comments that a user access one of several 
+  <STRONG>control files</STRONG> (See <A href="Control_Files.htm">Control 
+  Files</A>) to gain access to Latin-2, Latin-3, or other 8-bit standardized 
+  character sets.&nbsp;The <STRONG>control files</STRONG>      
+           
+  may redirect the "~" character to one of the negative character codes so that 
+  the translation table would display the table when "~" is given for 
+  input.&nbsp;Doing this allows you to still have a "~" 
+  <STRONG>FIGcharacter</STRONG> for those who do not use a control file.</DIV></LI></OL>
+<P>Those <STRONG>FIGcharacters</STRONG> which are not 
+required must have an explicit character code in a separate line preceding them, 
+called a "code tag".&nbsp;A code tag contains the value of the character code, 
+followed by whitespace (a few spaces), and perhaps an optional comment.&nbsp;The 
+comment is usually the name of the <STRONG>FIGcharacter</STRONG>.&nbsp;The Unicode Consortium has 
+assigned formal names to all officially accepted characters, and these may be 
+used.&nbsp;An entire code tag, including the comment, should not occupy more 
+than 95 columns.&nbsp;(Over 100 characters here may make older versions of 
+<STRONG>FIGlet</STRONG> crash.)</P>
+<P>Here is an example, showing two code tagged <STRONG>FIGcharacters</STRONG> 
+after the last two required Deutsch <STRONG>FIGcharacters</STRONG>.&nbsp;Again, 
+the line drawn below consisting of "|" represents the left margin, and is NOT 
+part of the <STRONG>FIGfont</STRONG>.</P>
+<P><TEXTAREA style="OVERFLOW-Y: hidden" rows=26 cols=120 readOnly>                   | _   _ @
+                   |(_) (_)@
+                   || | | |@
+                   || |_| |@
+                   | \__,_|@
+                   |       @@
+                   |  ___ @
+                   | / _ \@
+                   || |/ /@
+                   || |\ \@
+                   || ||_/@
+                   ||_|   @@
+                   |161  INVERTED EXCLAMATION MARK
+                   | _ @
+                   |(_)@
+                   || |@
+                   || |@
+                   ||_|@
+                   |   @@
+                   |162  CENT SIGN
+                   |   _  @
+                   |  | | @
+                   | / __)@
+                   || (__ @
+                   | \   )@
+                   |  |_| @@
+</TEXTAREA></P>
+<P>A character code may be expressed in decimal (as shown above, numbers we're 
+all familiar with), or in Octal (seldom used) or in hexadecimal.</P>
+<P>Character codes expressed in octal must be preceded by "0" (zero), and if 
+negative, "-" (minus) must precede the "0".&nbsp;There are eight octal digits: 
+01234567.&nbsp;You may recall octal numbers from school as "base 8 numbers".</P>
+<P>Character codes expressed in hexadecimal must be preceded by "0x" or "0X". 
+(That's also a zero.) If negative, the "-" must precede the "0x".&nbsp;There are 
+16 hexadecimal digits: 01234567890ABCDEF.&nbsp;(The "letter-digits" may also be 
+lowercase.)&nbsp;Hexadecimal is "base 16".</P>
+<P>It is common to express character codes less than 256 (in the range of an 
+8-bit character set) as decimal, while <STRONG>FIGfonts</STRONG> which extend 
+into the Unicode range would have character codes expressed in 
+hexadecimal.&nbsp;This is because the Unicode Standard expresses character codes 
+in hexadecimal, which is helpful for programmers.</P>
+<P>The code tagged 
+<STRONG>FIGcharacters</STRONG> may be 
+listed in any order, but simple sequential order is recommended.</P>
+<P>If two or more <STRONG>FIGcharacters</STRONG> have the same character code, 
+the last one in&nbsp;the <STRONG>FIGfont</STRONG> is the one used.&nbsp;It is 
+common for the Deutsch <STRONG>FIGcharacters</STRONG> to be given twice in a 
+<STRONG>FIGfont</STRONG>, just to maintain a consistent order for the Latin-1 
+range (128 to 255).</P>
+<P>It is not advisable to assign character codes in the 
+range of 1 to 31, since this range includes control characters in 
+ASCII.&nbsp;Character code 127 is a delete in ASCII, and is also not 
+advised.&nbsp;Character codes 128 to 159 are additional control characters in 
+Latin-1, and they too should not be used. All of the above are legal, 
+technically, but are not part of what is legal for input, so they could only be 
+accessed by use of a <STRONG>control file</STRONG>. (See <A 
+href="Control_Files.htm">Control Files</A>) If you 
+are still tempted to use them, consider negative character codes instead, which 
+are meaningless in all standardized character sets.</P>Again, the character code 
+-1 is illegal for technical reasons.</body>
+</html>

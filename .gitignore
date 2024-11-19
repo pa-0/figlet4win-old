@@ -6,3 +6,11 @@ core
 *~
 tests.log
 *.tar.gz
+build
+.cache
+*.code-workspace
+*.log
+__pycache__/
+*.py[cod]
+*$py.class
+chm_output/
